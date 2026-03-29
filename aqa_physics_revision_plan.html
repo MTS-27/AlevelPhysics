@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AQA A-Level Physics — Revision Command Centre</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg-color: #0f172a;
+      --glass-bg: rgba(30, 41, 59, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --primary: #3b82f6;
+      --primary-hover: #2563eb;
+      --secondary: #10b981;
+      --accent: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Outfit', sans-serif;
+      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #064e3b, #172554);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 2rem;
+    }
+
+    /* Glassmorphism utilities */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    h1, h2, h3 { font-weight: 600; margin-bottom: 1rem; }
+    h1 { font-size: 24px; line-height: 1.3; background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    /* Sidebar styling */
+    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .widget { padding: 1.5rem; }
+    .widget-title { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+    
+    /* Clock */
+    .clock-display { font-size: 2.5rem; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+    .date-display { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem; }
+
+    /* Pomodoro */
+    .pomodoro-display { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 1rem 0; font-variant-numeric: tabular-nums; color: var(--secondary); text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+    .pomodoro-controls { display: flex; justify-content: center; gap: 0.5rem; }
+    .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 10px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem; }
+    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
+    .btn-secondary { background: rgba(255,255,255,0.1); }
+    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+
+    /* Todo List */
+    .todo-input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; padding: 0.75rem; border-radius: 10px; font-family: inherit; margin-bottom: 1rem; outline: none; transition: border 0.2s; }
+    .todo-input:focus { border-color: var(--primary); }
+    .todo-list { display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto; }
+    .todo-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.2s; font-size: 0.9rem; }
+    .todo-item:hover { background: rgba(255,255,255,0.1); }
+    .todo-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--secondary); cursor: pointer; }
+    .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
+
+    /* Main Content */
+    .main-content { display: flex; flex-direction: column; gap: 1.5rem; }
+    
+    .header-card { padding: 2rem; position: relative; overflow: hidden; }
+    .header-card::after { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.2; border-radius: 50%; }
+    
+    .tabs { display: flex; gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 15px; margin-bottom: 1rem; overflow-x: auto; }
+    .tab { padding: 0.75rem 1.5rem; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 500; transition: all 0.3s; white-space: nowrap; }
+    .tab:hover { color: white; background: rgba(255,255,255,0.05); }
+    .tab.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+
+    .panel { display: none; padding: 2rem; animation: fadeIn 0.4s ease forwards; }
+    .panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Overview Stats */
+    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 15px; text-align: center; transition: transform 0.2s; }
+    .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); }
+    .stat-n { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; text-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+    .stat-l { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+    /* Grade Bars */
+    .grade-bar { background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; border: 1px solid var(--glass-border); }
+    .grade-label { font-weight: 600; margin-bottom: 0.75rem; display: flex; justify-content: space-between;}
+    .bar-track { height: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 0.75rem; }
+    .bar-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+    .bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); animation: shimmer 2s infinite; }
+    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    .grade-c .bar-fill { background: linear-gradient(90deg, #64748b, #94a3b8); width: 50%; }
+    .grade-b .bar-fill { background: linear-gradient(90deg, #2563eb, #3b82f6); width: 65%; }
+    .grade-a .bar-fill { background: linear-gradient(90deg, #059669, #10b981); width: 80%; }
+    .bar-note { font-size: 0.85rem; color: var(--text-muted); }
+
+    /* Timeline */
+    .timeline { margin-top: 2rem; position: relative; padding-left: 20px; }
+    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--glass-border); }
+    .phase { position: relative; padding-bottom: 2rem; padding-left: 1.5rem; }
+    .phase::before { content: ''; position: absolute; left: -25px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary); border: 2px solid var(--bg-color); }
+    .phase.p2::before { background: var(--secondary); box-shadow: 0 0 10px var(--secondary); }
+    .phase.p3::before { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+    .phase-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; color: white; }
+    .phase-dates { font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem; font-weight: 500; }
+    .phase.p2 .phase-dates { color: var(--secondary); }
+    .phase.p3 .phase-dates { color: var(--accent); }
+
+    /* Topics styling */
+    .paper-header { margin: 2rem 0 1rem; display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; }
+    .paper-pill { padding: 0.4rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; }
+    .pill-1 { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.5); }
+    .pill-2 { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
+    .pill-3 { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.5); }
+    
+    .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+    .topic-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.25rem; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; }
+    .topic-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); opacity: 0; transition: opacity 0.3s; }
+    .topic-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .topic-card:hover::before { opacity: 1; }
+    
+    .topic-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
+    .topic-num { background: rgba(255,255,255,0.1); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; }
+    .topic-title { font-weight: 600; font-size: 1.05rem; }
+    .topic-tags { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
+    
+    .diff { margin-top: 1rem; align-self: flex-start; font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .ok { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+    .med { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+    .hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+
+    /* Plan & Tips */
+    .day-row { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 0.5rem; transition: background 0.2s; }
+    .day-row:hover { background: rgba(255,255,255,0.05); }
+    .day-label { font-weight: 700; width: 45px; color: var(--primary); text-transform: uppercase; font-size: 0.9rem; }
+    .day-task { flex: 1; font-size: 0.95rem; line-height: 1.4; color: var(--text-main); }
+    .day-hrs { background: rgba(255,255,255,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .wknd { opacity: 0.6; }
+    .wknd .day-label { color: var(--text-muted); }
+
+    .tip-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; position: relative; overflow: hidden; }
+    .tip-card::before { content: '\f0eb'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -15px; top: -15px; font-size: 5rem; color: rgba(255,255,255,0.03); transform: rotate(15deg); }
+    .tip-title { font-size: 1.1rem; font-weight: 600; color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+    .tip-title::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+
+    @media (max-width: 900px) {
+      .container { grid-template-columns: 1fr; }
+      .sidebar { order: -1; }
+      .stat-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  
+  <!-- SIDEBAR: Tools -->
+  <aside class="sidebar">
+    <div class="glass widget">
+      <div class="widget-title"><i class="fa-regular fa-clock"></i> Current Time</div>
+      <div class="clock-display" id="live-clock">00:00:00</div>
+      <div class="date-display" id="live-date">Monday, 1 Jan</div>
+    </div>
+
+    <div class="glass widget">
+      <div class="widget-title"><i class="fa-solid fa-stopwatch"></i> Focus Timer</div>
+      <div class="pomodoro-display" id="pomodoro-time">25:00</div>
+      <div class="pomodoro-controls">
+        <button class="btn" id="pom-start"><i class="fa-solid fa-play"></i> Start</button>
+        <button class="btn btn-secondary" id="pom-pause"><i class="fa-solid fa-pause"></i></button>
+        <button class="btn btn-secondary" id="pom-reset"><i class="fa-solid fa-rotate-right"></i></button>
+      </div>
+      <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;">
+        <span style="font-size:0.8rem; cursor:pointer; color:var(--text-muted);" onclick="setPomodoro(25)">25m Work</span>
+        <span style="font-size:0.8rem; cursor:pointer; color:var(--text-muted);" onclick="setPomodoro(5)">5m Break</span>
+      </div>
+    </div>
+
+    <div class="glass widget">
+      <div class="widget-title"><i class="fa-solid fa-list-check"></i> Study Checklist</div>
+      <input type="text" id="todo-input" class="todo-input" placeholder="Add a quick task... (Press Enter)">
+      <div class="todo-list" id="todo-list">
+        <!-- Todos inserted via JS -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN AREA -->
+  <main class="main-content">
+    
+    <header class="glass header-card">
+      <h1>AQA A-Level Physics</h1>
+      <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem;">Your ultimate command centre for top grades.</p>
+    </header>
+
+    <div class="tabs glass">
+      <div class="tab active" onclick="show('overview', this)"><i class="fa-solid fa-chart-line"></i> Overview</div>
+      <div class="tab" onclick="show('topics', this)"><i class="fa-solid fa-book"></i> All Topics</div>
+      <div class="tab" onclick="show('plan', this)"><i class="fa-solid fa-calendar-week"></i> Easter Plan</div>
+      <div class="tab" onclick="show('tips', this)"><i class="fa-solid fa-lightbulb"></i> Exam Tips</div>
+    </div>
+
+    <!-- OVERVIEW -->
+    <div id="panel-overview" class="panel glass active">
+      <div class="stat-row">
+        <div class="stat-card">
+          <div class="stat-n" id="countdown-days">59</div>
+          <div class="stat-l">Days to Exams</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">14</div>
+          <div class="stat-l">Easter Days Off</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-n">3</div>
+          <div class="stat-l">Papers to Cover</div>
+        </div>
+      </div>
+
+      <h3 style="margin-top:2rem; margin-bottom:1.5rem;">Grade Trajectory</h3>
+      <div class="grade-bar grade-c">
+        <div class="grade-label"><span>Grade C — Your Floor</span> <span style="font-weight:400; color:var(--text-muted);">≈50% UMS</span></div>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <div class="bar-note">Secure with solid Paper 1 + 2 basics and Medical Physics fundamentals</div>
+      </div>
+      <div class="grade-bar grade-b">
+        <div class="grade-label"><span>Grade B — Realistic Stretch</span> <span style="font-weight:400; color:var(--text-muted);">≈60% UMS</span></div>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <div class="bar-note">Requires understanding application questions, not just recall. Achievable in 59 days.</div>
+      </div>
+      <div class="grade-bar grade-a">
+        <div class="grade-label"><span>Grade A — Target Grade</span> <span style="font-weight:400; color:var(--text-muted);">≈80% UMS</span></div>
+        <div class="bar-track"><div class="bar-fill"></div></div>
+        <div class="bar-note">Needs consistent past paper practice + near-full topic coverage. Ambitious but possible.</div>
+      </div>
+
+      <h3 style="margin-top:2.5rem;">Attack Plan Phases</h3>
+      <div class="timeline">
+        <div class="phase">
+          <div class="phase-title">Phase 1 — Easter Fortnight</div>
+          <div class="phase-dates">30 Mar – 12 Apr · Full-time revision window</div>
+          <div style="color:var(--text-muted); line-height:1.6;">Cover all Paper 1 topics (Topics 1–6) from scratch. 2 topics per day, afternoon past paper questions by topic. This is your most important window.</div>
+        </div>
+        <div class="phase p2">
+          <div class="phase-title">Phase 2 — Back at School</div>
+          <div class="phase-dates">13 Apr – 9 May · Evenings + weekends</div>
+          <div style="color:var(--text-muted); line-height:1.6;">Cover Paper 2 topics (Topics 6–8) in evenings. Do one full timed past paper per weekend. Medical Physics on weekends in May.</div>
+        </div>
+        <div class="phase p3">
+          <div class="phase-title">Phase 3 — Final Push</div>
+          <div class="phase-dates">10 May – 27 May · High intensity consolidation</div>
+          <div style="color:var(--text-muted); line-height:1.6;">Past papers only. Mark, identify weak spots, targeted re-revision. Consolidate formula sheet. Sleep and eat well — performance matters.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOPICS -->
+    <div id="panel-topics" class="panel glass">
+      
+      <!-- PAPER 1 -->
+      <div class="paper-header">
+        <span class="paper-pill pill-1">Paper 1</span>
+        <span style="font-weight:600;">Measurements, Particles, Waves, Mechanics, Electricity + Further Mechanics</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">1</span>
+            <div class="diff ok">Quick win</div>
+          </div>
+          <div class="topic-title">Measurements & errors</div>
+          <div class="topic-tags">Uncertainties, SI units, significant figures, random vs systematic errors</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">2</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Particles & radiation</div>
+          <div class="topic-tags">Quarks, leptons, exchange particles, photoelectric effect, wave-particle duality</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">3</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Waves</div>
+          <div class="topic-tags">Stationary waves, diffraction, interference, refraction, optical fibres</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">4</span>
+            <div class="diff hard">Hard</div>
+          </div>
+          <div class="topic-title">Mechanics & materials</div>
+          <div class="topic-tags">Vectors, moments, projectiles, Newton's laws, Young's modulus, stress/strain</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">5</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Electricity</div>
+          <div class="topic-tags">Current, resistance, EMF, internal resistance, I-V characteristics, circuits</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">6a</span>
+            <div class="diff hard">Hard</div>
+          </div>
+          <div class="topic-title">Further mechanics (P1)</div>
+          <div class="topic-tags">Momentum, circular motion, simple harmonic motion</div>
+        </div>
+      </div>
+
+      <!-- PAPER 2 -->
+      <div class="paper-header" style="margin-top:2.5rem;">
+        <span class="paper-pill pill-2">Paper 2</span>
+        <span style="font-weight:600;">Further Mechanics, Thermal, Fields, Nuclear</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">6b</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Thermal physics</div>
+          <div class="topic-tags">Specific heat, latent heat, ideal gas law, kinetic theory, Brownian motion</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">7</span>
+            <div class="diff hard">Hardest Topic</div>
+          </div>
+          <div class="topic-title">Fields & consequences</div>
+          <div class="topic-tags">Gravity, electric fields, capacitors, magnetic fields, electromagnetic induction</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">8</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Nuclear physics</div>
+          <div class="topic-tags">Radioactive decay, half-life, binding energy, fission, fusion</div>
+        </div>
+      </div>
+
+      <!-- PAPER 3 -->
+      <div class="paper-header" style="margin-top:2.5rem;">
+        <span class="paper-pill pill-3">Paper 3</span>
+        <span style="font-weight:600;">Practical skills + Medical Physics (Topic 10)</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">P</span>
+            <div class="diff ok">High Reward</div>
+          </div>
+          <div class="topic-title">Practical skills (Sec A)</div>
+          <div class="topic-tags">Data analysis, graph skills, uncertainty, experimental design (comes from practicals)</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">10.1</span>
+            <div class="diff ok">Good Marks</div>
+          </div>
+          <div class="topic-title">Physics of eye & ear</div>
+          <div class="topic-tags">Lenses, defects of vision, dioptres, threshold of hearing, intensity</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">10.2</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Imaging tech</div>
+          <div class="topic-tags">X-rays, CT, ultrasound A/B-scans, acoustic impedance, MRI principles</div>
+        </div>
+        <div class="topic-card">
+          <div class="topic-header">
+            <span class="topic-num">10.3</span>
+            <div class="diff med">Medium</div>
+          </div>
+          <div class="topic-title">Nuclear medicine</div>
+          <div class="topic-tags">Gamma cameras, PET scans, tracers, radiotherapy, radiation dose</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- EASTER PLAN -->
+    <div id="panel-plan" class="panel glass">
+      <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--primary); padding: 1.25rem; border-radius: 8px; margin-bottom: 2rem; color: #bae6fd; font-size: 0.95rem; line-height: 1.6;">
+        <i class="fa-solid fa-bullseye" style="margin-right:8px;"></i> Aim for 5–6 hours of quality revision per day. Split into morning (new content) and afternoon (past paper Qs). Take Sunday afternoons off to recover.
+      </div>
+
+      <h3 style="color:var(--primary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Week 1 — 30 Mar to 5 Apr</h3>
+      <div class="day-row"><div class="day-label">Mon</div><div class="day-task">Topic 1 (Measurements) + 2 (Particles) — notes + PMT questions</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Tue</div><div class="day-task">Topic 3 (Waves) — stationary waves, diffraction. Afternoon: 20 past paper Qs</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Wed</div><div class="day-task">Topic 4 (Mechanics) — vectors, projectiles, Newton's laws.</div><div class="day-hrs">6h</div></div>
+      <div class="day-row"><div class="day-label">Thu</div><div class="day-task">Topic 4 cont. — stress/strain/Young's modulus + begin Topic 5 (Electricity)</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Fri</div><div class="day-task">Topic 5 (Electricity) finish — EMF, circuit problems</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label" style="color:#f43f5e">Sat</div><div class="day-task">Full timed Paper 1 past paper (2 hrs) → mark → review wrong answers</div><div class="day-hrs">4h</div></div>
+      <div class="day-row wknd"><div class="day-label">Sun</div><div class="day-task">Rest / light review of flashcards. No heavy revision.</div><div class="day-hrs">—</div></div>
+
+      <h3 style="color:var(--secondary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-top:2.5rem; margin-bottom:1rem;">Week 2 — 6 Apr to 12 Apr</h3>
+      <div class="day-row"><div class="day-label">Mon</div><div class="day-task">Topic 6a (Further mechanics) — momentum, circular motion, SHM.</div><div class="day-hrs">6h</div></div>
+      <div class="day-row"><div class="day-label">Tue</div><div class="day-task">Topic 6a cont. + SHM practice questions</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Wed</div><div class="day-task">Medical Physics 10.1 — eye & ear. Dioptre calcs, decibel scale.</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Thu</div><div class="day-task">Medical Physics 10.2 — X-rays, ultrasound, MRI. Make definitions table.</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label">Fri</div><div class="day-task">Medical Physics 10.3 — nuclear medicine, PET, radiotherapy.</div><div class="day-hrs">5h</div></div>
+      <div class="day-row"><div class="day-label" style="color:#f43f5e">Sat</div><div class="day-task">Full timed Paper 3 Medical Physics past paper → mark → review</div><div class="day-hrs">4h</div></div>
+      <div class="day-row wknd"><div class="day-label">Sun</div><div class="day-task">Formulas review + rest. Prep for school returning.</div><div class="day-hrs">—</div></div>
+    </div>
+
+    <!-- TIPS -->
+    <div id="panel-tips" class="panel glass">
+      <div class="tip-card">
+        <div class="tip-title">PMT is your main resource</div>
+        <div style="color:var(--text-muted); line-height:1.6;">physicsandmathstutor.com has AQA past paper questions sorted by topic. This is the best revision tool — do questions by topic until the last 2 weeks. Use A Level Physics Online for video explainers.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Master the formula sheet</div>
+        <div style="color:var(--text-muted); line-height:1.6;">Know exactly what's in your AQA data booklet. Stop memorising things that are given to you, and focus on those that aren't (wave speed eq, de Broglie, specific electrical formulas).</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Paper 3 Section A = Free Marks</div>
+        <div style="color:var(--text-muted); line-height:1.6;">Tests practical skills — plotting graphs, identifying errors, improvements. Practice drawing best-fit lines with error bars. Learn keywords like "anomalous result", "systematic error".</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Respect Fields (Topic 7)</div>
+        <div style="color:var(--text-muted); line-height:1.6;">Gravitational, electric, and magnetic fields naturally follow similar patterns. Capacitors and EM induction especially need worked examples, not just notes. Allocate extra time here.</div>
+      </div>
+      <div class="tip-card">
+        <div class="tip-title">Show EVERY step</div>
+        <div style="color:var(--text-muted); line-height:1.6;">AQA gives method marks. Even with a wrong final answer, you can get 2/3 marks by writing the correct formula and substituting values. "By inspection" skips cost marks!</div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Tab Navigation
+  function show(id, element) {
+    document.querySelectorAll('.panel').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    
+    const target = document.getElementById('panel-' + id);
+    if(target) {
+      target.style.display = 'block';
+      setTimeout(() => { target.classList.add('active'); }, 10);
+    }
+    
+    if(element) element.classList.add('active');
+  }
+
+  // Live Clock & Date
+  function updateTime() {
+    const now = new Date();
+    document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
+    document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+
+  // Exam Countdown Logic
+  function updateExamCountdown() {
+    const examDate = new Date('2026-05-27T00:00:00');
+    const now = new Date();
+    const diffTime = Math.max(0, examDate - now);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const countdownEl = document.getElementById('countdown-days');
+    if (countdownEl) countdownEl.textContent = diffDays;
+  }
+  updateExamCountdown();
+  // Update at midnight if the user leaves the tab open forever
+  setInterval(updateExamCountdown, 1000 * 60 * 60);
+
+  // Pomodoro Logic
+  let pomTimeLeft = 25 * 60;
+  let pomInterval = null;
+  const pomDisplay = document.getElementById('pomodoro-time');
+
+  function updatePomDisplay() {
+    const m = Math.floor(pomTimeLeft / 60).toString().padStart(2, '0');
+    const s = (pomTimeLeft % 60).toString().padStart(2, '0');
+    pomDisplay.textContent = `${m}:${s}`;
+  }
+
+  function setPomodoro(minutes) {
+    clearInterval(pomInterval);
+    pomInterval = null;
+    pomTimeLeft = minutes * 60;
+    updatePomDisplay();
+    document.getElementById('pom-start').innerHTML = '<i class="fa-solid fa-play"></i> Start';
+  }
+
+  document.getElementById('pom-start').addEventListener('click', function() {
+    if (pomInterval) return;
+    this.innerHTML = '<i class="fa-solid fa-play"></i> Running';
+    pomInterval = setInterval(() => {
+      if (pomTimeLeft > 0) {
+        pomTimeLeft--;
+        updatePomDisplay();
+      } else {
+        clearInterval(pomInterval);
+        pomInterval = null;
+        this.innerHTML = '<i class="fa-solid fa-play"></i> Start';
+        alert('Time is up! Take a break.');
+      }
+    }, 1000);
+  });
+
+  document.getElementById('pom-pause').addEventListener('click', function() {
+    clearInterval(pomInterval);
+    pomInterval = null;
+    document.getElementById('pom-start').innerHTML = '<i class="fa-solid fa-play"></i> Resume';
+  });
+
+  document.getElementById('pom-reset').addEventListener('click', function() {
+    setPomodoro(25);
+  });
+  updatePomDisplay();
+
+  // Study Checklist Logic (with LocalStorage)
+  const todoInput = document.getElementById('todo-input');
+  const todoList = document.getElementById('todo-list');
+  let todos = JSON.parse(localStorage.getItem('aqa_todos')) || [
+    { text: 'Read Topic 1 Notes', done: false },
+    { text: 'Do 10 Measurements MCQs', done: false }
+  ];
+
+  function renderTodos() {
+    todoList.innerHTML = '';
+    todos.forEach((todo, index) => {
+      const div = document.createElement('div');
+      div.className = `todo-item ${todo.done ? 'completed' : ''}`;
+      div.innerHTML = `
+        <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="toggleTodo(${index})">
+        <span style="flex:1">${todo.text}</span>
+        <i class="fa-solid fa-trash" style="color:var(--danger); cursor:pointer; font-size:0.85rem;" onclick="deleteTodo(${index})"></i>
+      `;
+      todoList.appendChild(div);
+    });
+    localStorage.setItem('aqa_todos', JSON.stringify(todos));
+  }
+
+  todoInput.addEventListener('keypress', function(e) {
+    if (e.key === 'Enter' && this.value.trim() !== '') {
+      todos.push({ text: this.value.trim(), done: false });
+      this.value = '';
+      renderTodos();
+    }
+  });
+
+  window.toggleTodo = function(index) {
+    todos[index].done = !todos[index].done;
+    renderTodos();
+  };
+
+  window.deleteTodo = function(index) {
+    todos.splice(index, 1);
+    renderTodos();
+  };
+
+  renderTodos();
+</script>
+</body>
+</html>
