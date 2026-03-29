@@ -159,13 +159,20 @@
     .hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
 
     /* Plan & Tips */
-    .day-row { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 0.5rem; transition: background 0.2s; }
+    .day-row { display: flex; flex-direction: column; padding: 1rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 0.5rem; transition: background 0.2s; cursor: pointer; }
+    .day-row-header { display: flex; align-items: center; gap: 1rem; width: 100%; }
     .day-row:hover { background: rgba(255,255,255,0.05); }
     .day-label { font-weight: 700; width: 45px; color: var(--primary); text-transform: uppercase; font-size: 0.9rem; }
-    .day-task { flex: 1; font-size: 0.95rem; line-height: 1.4; color: var(--text-main); }
-    .day-hrs { background: rgba(255,255,255,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+    .day-task { flex: 1; font-size: 0.95rem; line-height: 1.4; color: var(--text-main); font-weight: 500;}
+    .day-hrs { background: rgba(255,255,255,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
     .wknd { opacity: 0.6; }
     .wknd .day-label { color: var(--text-muted); }
+    .day-expand-icon { transition: transform 0.3s ease; color: var(--text-muted); }
+    .day-row.expanded .day-expand-icon { transform: rotate(180deg); }
+    .day-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease, opacity 0.3s ease; opacity: 0; padding-left: 60px; color: var(--text-muted); font-size: 0.9rem; }
+    .day-row.expanded .day-details { max-height: 500px; margin-top: 1rem; opacity: 1; }
+    .day-details ul { margin-left: 1.5rem; margin-top: 0.5rem; list-style-type: disc; }
+    .day-details li { margin-bottom: 0.25rem; }
 
     .tip-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; position: relative; overflow: hidden; }
     .tip-card::before { content: '\f0eb'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -15px; top: -15px; font-size: 5rem; color: rgba(255,255,255,0.03); transform: rotate(15deg); }
@@ -233,16 +240,16 @@
     <div id="panel-overview" class="panel glass active">
       <div class="stat-row">
         <div class="stat-card">
-          <div class="stat-n" id="countdown-days">59</div>
-          <div class="stat-l">Days to Exams</div>
+          <div class="stat-n" id="countdown-p1">--</div>
+          <div class="stat-l">To Paper 1 (28 May)</div>
         </div>
         <div class="stat-card">
-          <div class="stat-n">14</div>
-          <div class="stat-l">Easter Days Off</div>
+          <div class="stat-n" id="countdown-p2">--</div>
+          <div class="stat-l">To Paper 2 (1 Jun)</div>
         </div>
         <div class="stat-card">
-          <div class="stat-n">3</div>
-          <div class="stat-l">Papers to Cover</div>
+          <div class="stat-n" id="countdown-p3">--</div>
+          <div class="stat-l">To Paper 3 (8 Jun)</div>
         </div>
       </div>
 
@@ -423,22 +430,242 @@
       </div>
 
       <h3 style="color:var(--primary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Week 1 — 30 Mar to 5 Apr</h3>
-      <div class="day-row"><div class="day-label">Mon</div><div class="day-task">Topic 1 (Measurements) + 2 (Particles) — notes + PMT questions</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Tue</div><div class="day-task">Topic 3 (Waves) — stationary waves, diffraction. Afternoon: 20 past paper Qs</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Wed</div><div class="day-task">Topic 4 (Mechanics) — vectors, projectiles, Newton's laws.</div><div class="day-hrs">6h</div></div>
-      <div class="day-row"><div class="day-label">Thu</div><div class="day-task">Topic 4 cont. — stress/strain/Young's modulus + begin Topic 5 (Electricity)</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Fri</div><div class="day-task">Topic 5 (Electricity) finish — EMF, circuit problems</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label" style="color:#f43f5e">Sat</div><div class="day-task">Full timed Paper 1 past paper (2 hrs) → mark → review wrong answers</div><div class="day-hrs">4h</div></div>
-      <div class="day-row wknd"><div class="day-label">Sun</div><div class="day-task">Rest / light review of flashcards. No heavy revision.</div><div class="day-hrs">—</div></div>
+      
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Mon</div>
+          <div class="day-task">Topic 1 (Measurements) + 2 (Particles)</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Foundation knowledge and calculation practice.
+          <ul>
+            <li>Morning: Topic 1 Notes (Errors, Units, Uncertainties).</li>
+            <li>Morning: Topic 2 Notes (Constituents of atom, particles, radiation).</li>
+            <li>Afternoon: Complete 30+ past paper questions from Physics & Maths Tutor (PMT).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Tue</div>
+          <div class="day-task">Topic 3 (Waves) — stationary waves, diffraction.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Visualizing waves and interference.
+          <ul>
+            <li>Morning: Revise stationary waves, diffraction gratings, and refraction.</li>
+            <li>Morning: Review optical fibres material.</li>
+            <li>Afternoon: 20 past paper questions focusing on 6-mark explanations.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Wed</div>
+          <div class="day-task">Topic 4 (Mechanics) — vectors, projectiles, Newton's laws.</div>
+          <div class="day-hrs">6h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Resolving vectors and practicing kinetics equations.
+          <ul>
+            <li>Morning: Vector resolution practice.</li>
+            <li>Morning: SUVAT equations for projectile motion.</li>
+            <li>Afternoon: Tricky Newton's laws and moments PMT questions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Thu</div>
+          <div class="day-task">Topic 4 cont. + begin Topic 5 (Electricity).</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Materials property calculations and basic circuits.
+          <ul>
+            <li>Morning: Stress, strain, Young's modulus formulas.</li>
+            <li>Afternoon: Current, voltage, resistance, resistivity.</li>
+            <li>Evening: Memorize the I-V characteristics for components.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Fri</div>
+          <div class="day-task">Topic 5 (Electricity) finish — EMF, circuit problems.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Internal resistance and potential dividers.
+          <ul>
+            <li>Morning: Kirchhoff's laws application.</li>
+            <li>Morning: EMF and internal resistance graph questions.</li>
+            <li>Afternoon: Potential divider circuit past paper questions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label" style="color:#f43f5e">Sat</div>
+          <div class="day-task">Full timed Paper 1 past paper (2 hrs).</div>
+          <div class="day-hrs">4h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Exam technique and timing under pressure.
+          <ul>
+            <li>Morning: Sit a complete Paper 1 under strict exam conditions (2 hours).</li>
+            <li>Afternoon: Brutally mark the paper using the official mark scheme.</li>
+            <li>Evening: Create flashcards for mistakes and identify weakest topic.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row wknd" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Sun</div>
+          <div class="day-task">Rest / light review of flashcards.</div>
+          <div class="day-hrs">—</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Recovery and passive recall.
+          <ul>
+            <li>Review flashcards made on Saturday.</li>
+            <li>Sleep and relax to avoid burnout.</li>
+          </ul>
+        </div>
+      </div>
 
       <h3 style="color:var(--secondary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-top:2.5rem; margin-bottom:1rem;">Week 2 — 6 Apr to 12 Apr</h3>
-      <div class="day-row"><div class="day-label">Mon</div><div class="day-task">Topic 6a (Further mechanics) — momentum, circular motion, SHM.</div><div class="day-hrs">6h</div></div>
-      <div class="day-row"><div class="day-label">Tue</div><div class="day-task">Topic 6a cont. + SHM practice questions</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Wed</div><div class="day-task">Medical Physics 10.1 — eye & ear. Dioptre calcs, decibel scale.</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Thu</div><div class="day-task">Medical Physics 10.2 — X-rays, ultrasound, MRI. Make definitions table.</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label">Fri</div><div class="day-task">Medical Physics 10.3 — nuclear medicine, PET, radiotherapy.</div><div class="day-hrs">5h</div></div>
-      <div class="day-row"><div class="day-label" style="color:#f43f5e">Sat</div><div class="day-task">Full timed Paper 3 Medical Physics past paper → mark → review</div><div class="day-hrs">4h</div></div>
-      <div class="day-row wknd"><div class="day-label">Sun</div><div class="day-task">Formulas review + rest. Prep for school returning.</div><div class="day-hrs">—</div></div>
+      
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Mon</div>
+          <div class="day-task">Topic 6a (Further mechanics) — momentum, circular motion.</div>
+          <div class="day-hrs">6h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Getting to grips with Paper 2 mechanics.
+          <ul>
+            <li>Morning: Momentum conservation and impulse.</li>
+            <li>Morning: Circular motion formulas (radians, angular speed).</li>
+            <li>Afternoon: Complete circular motion past paper questions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Tue</div>
+          <div class="day-task">Topic 6a cont. + SHM practice questions.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Simple Harmonic Motion (SHM) systems.
+          <ul>
+            <li>Morning: SHM definitions, equations, and graphs.</li>
+            <li>Morning: Mass-spring systems and simple pendulums.</li>
+            <li>Afternoon: Resonance and damping 6-mark questions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Wed</div>
+          <div class="day-task">Medical Physics 10.1 — eye & ear.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Paper 3 option starting.
+          <ul>
+            <li>Morning: Physics of vision, lenses, myopia/hypermetropia, astigmatism.</li>
+            <li>Afternoon: Physics of hearing, human ear structure, intensity level, dBA scale.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Thu</div>
+          <div class="day-task">Medical Physics 10.2 — X-rays, ultrasound, MRI.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Imaging principles and comparing modalities.
+          <ul>
+            <li>Morning: X-ray production, attenuation, CT scans.</li>
+            <li>Afternoon: Ultrasound generators, A-scan vs B-scan, acoustic impedance.</li>
+            <li>Evening: Basic principles of MR scanning.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Fri</div>
+          <div class="day-task">Medical Physics 10.3 — nuclear medicine, PET.</div>
+          <div class="day-hrs">5h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Radioactivity in a medical context.
+          <ul>
+            <li>Morning: Half-life (physical, biological, effective).</li>
+            <li>Morning: Gamma cameras, Tc-99m tracer, PET scans and annihilation.</li>
+            <li>Afternoon: Radiotherapy (high energy X-rays, implants).</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label" style="color:#f43f5e">Sat</div>
+          <div class="day-task">Full timed Paper 3 Medical Physics past paper.</div>
+          <div class="day-hrs">4h</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Applying Option knowledge + Practical Skills (Section A).
+          <ul>
+            <li>Morning: Do a complete Paper 3 (Section A and Section B Medical Physics).</li>
+            <li>Afternoon: Mark scheme review and spot common practical skill traps.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="day-row wknd" onclick="this.classList.toggle('expanded')">
+        <div class="day-row-header">
+          <div class="day-label">Sun</div>
+          <div class="day-task">Formulas review + rest. Prep for school.</div>
+          <div class="day-hrs">—</div>
+          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
+        </div>
+        <div class="day-details">
+          Focus: Recharging before the new term.
+          <ul>
+            <li>1 hour reviewing the data booklet and writing out derived formulas.</li>
+            <li>Organize notes for the return to school.</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <!-- TIPS -->
@@ -497,15 +724,24 @@
 
   // Exam Countdown Logic
   function updateExamCountdown() {
-    const examDate = new Date('2026-05-27T00:00:00');
     const now = new Date();
-    const diffTime = Math.max(0, examDate - now);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const countdownEl = document.getElementById('countdown-days');
-    if (countdownEl) countdownEl.textContent = diffDays;
+    
+    // Exam Dates
+    const dates = {
+      p1: new Date('2026-05-28T09:00:00'),
+      p2: new Date('2026-06-01T09:00:00'),
+      p3: new Date('2026-06-08T09:00:00')
+    };
+    
+    for (const [key, date] of Object.entries(dates)) {
+      const diffTime = Math.max(0, date - now);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+      const el = document.getElementById(`countdown-${key}`);
+      if (el) el.textContent = diffDays;
+    }
   }
   updateExamCountdown();
-  // Update at midnight if the user leaves the tab open forever
+  // Update once an hour
   setInterval(updateExamCountdown, 1000 * 60 * 60);
 
   // Pomodoro Logic
