@@ -1,837 +1,370 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AQA A-Level Physics — Revision Command Centre</title>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root {
-      --bg-color: #0f172a;
-      --glass-bg: rgba(30, 41, 59, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.1);
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --secondary: #10b981;
-      --accent: #8b5cf6;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --danger: #ef4444;
-      --warning: #f59e0b;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Physics Revision Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --color-bg-body: #0f172a;
+  --color-bg-app: rgba(30, 41, 59, 0.7);
+  --color-border-primary: rgba(255, 255, 255, 0.1);
+  --color-border-secondary: rgba(255, 255, 255, 0.15);
+  --color-bg-secondary: rgba(0, 0, 0, 0.2);
+  --color-text-main: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+  --color-text-tertiary: #94a3b8;
+  --color-primary: #3b82f6;
+  --color-primary-hover: #2563eb;
+  --color-success: #10b981;
+  --shadow-lg: 0 4px 30px rgba(0, 0, 0, 0.3);
+  --font-sans: 'Outfit', sans-serif;
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body {
-      font-family: 'Outfit', sans-serif;
-      background: linear-gradient(-45deg, #0f172a, #1e1b4b, #064e3b, #172554);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      color: var(--text-main);
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 2rem;
-    }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  background: linear-gradient(-45deg, #0f172a, #1e1b4b, #064e3b, #172554);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: var(--color-text-main);
+  line-height: 1.5;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+}
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+.app-container {
+  width: 100%;
+  max-width: 1000px;
+  background: var(--color-bg-app);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  padding: 2.5rem;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--color-border-primary);
+}
 
-    .container {
-      max-width: 1200px;
-      width: 100%;
-      display: grid;
-      grid-template-columns: 320px 1fr;
-      gap: 2rem;
-    }
+.app-header { text-align: center; margin-bottom: 2.5rem; }
+.app-title { font-size: 2.5rem; font-weight: 700; background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; }
+.app-subtitle { color: var(--color-text-tertiary); font-size: 1.1rem; font-weight: 400; }
 
-    /* Glassmorphism utilities */
-    .glass {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: 20px;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-    }
+.method-box { background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--color-primary); border-radius: 8px; padding: 1.25rem; margin-bottom: 2rem; font-size: 14px; color: #bae6fd; line-height: 1.6; }
+.method-box strong { color: #60a5fa; }
 
-    h1, h2, h3 { font-weight: 600; margin-bottom: 1rem; }
-    h1 { font-size: 24px; line-height: 1.3; background: linear-gradient(to right, #60a5fa, #a78bfa); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-    
-    /* Sidebar styling */
-    .sidebar { display: flex; flex-direction: column; gap: 1.5rem; }
-    
-    .widget { padding: 1.5rem; }
-    .widget-title { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-    
-    /* Clock */
-    .clock-display { font-size: 2.5rem; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
-    .date-display { text-align: center; color: var(--text-muted); font-size: 0.9rem; margin-top: 0.25rem; }
+.stat-strip { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2.5rem; }
+.stat-c { background: var(--color-bg-secondary); border: 1px solid var(--color-border-primary); border-radius: 16px; padding: 1.5rem; text-align: center; transition: transform 0.2s, background 0.2s; }
+.stat-c:hover { transform: translateY(-3px); background: rgba(255,255,255,0.03); }
+.stat-n { font-size: 2.2rem; font-weight: 700; color: var(--color-primary); margin-bottom: 4px; text-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+.stat-l { font-size: 11px; font-weight: 600; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 1px; }
 
-    /* Pomodoro */
-    .pomodoro-display { font-size: 3.5rem; font-weight: 700; text-align: center; margin: 1rem 0; font-variant-numeric: tabular-nums; color: var(--secondary); text-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-    .pomodoro-controls { display: flex; justify-content: center; gap: 0.5rem; }
-    .btn { background: var(--primary); color: white; border: none; padding: 0.6rem 1rem; border-radius: 10px; font-family: 'Outfit', sans-serif; font-weight: 600; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 0.4rem; }
-    .btn:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
-    .btn-secondary { background: rgba(255,255,255,0.1); }
-    .btn-secondary:hover { background: rgba(255,255,255,0.2); }
+.prog-wrap { margin-bottom: 2.5rem; background: var(--color-bg-secondary); padding: 1.5rem; border-radius: 16px; border: 1px solid var(--color-border-primary); }
+.prog-label { font-size: 14px; font-weight: 500; color: var(--color-text-main); margin-bottom: 12px; display: flex; justify-content: space-between; }
+.prog-track { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; position: relative; }
+.prog-fill { height: 100%; background: linear-gradient(90deg, #2563eb, #60a5fa); border-radius: 6px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); position: relative; }
+.prog-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
+@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-    /* Todo List */
-    .todo-input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); color: white; padding: 0.75rem; border-radius: 10px; font-family: inherit; margin-bottom: 1rem; outline: none; transition: border 0.2s; }
-    .todo-input:focus { border-color: var(--primary); }
-    .todo-list { display: flex; flex-direction: column; gap: 0.5rem; max-height: 200px; overflow-y: auto; }
-    .todo-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 8px; transition: all 0.2s; font-size: 0.9rem; }
-    .todo-item:hover { background: rgba(255,255,255,0.1); }
-    .todo-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--secondary); cursor: pointer; }
-    .todo-item.completed span { text-decoration: line-through; color: var(--text-muted); }
+.nav-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 2rem; background: rgba(0,0,0,0.2); padding: 6px; border-radius: 16px; overflow-x: auto; }
+.phase-btn { flex: 1; padding: 12px 20px; border-radius: 12px; border: none; font-family: var(--font-sans); font-size: 13px; font-weight: 500; cursor: pointer; background: transparent; color: var(--color-text-secondary); transition: all 0.3s; white-space: nowrap; text-align: center; }
+.phase-btn:hover { background: rgba(255,255,255,0.05); color: var(--color-text-main); }
+.phase-btn.active { background: var(--color-primary); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); font-weight: 600; }
 
-    /* Main Content */
-    .main-content { display: flex; flex-direction: column; gap: 1.5rem; }
-    
-    .header-card { padding: 2rem; position: relative; overflow: hidden; }
-    .header-card::after { content: ''; position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%); opacity: 0.2; border-radius: 50%; }
-    
-    .tabs { display: flex; gap: 0.5rem; background: rgba(0,0,0,0.2); padding: 0.5rem; border-radius: 15px; margin-bottom: 1rem; overflow-x: auto; }
-    .tab { padding: 0.75rem 1.5rem; border-radius: 10px; cursor: pointer; color: var(--text-muted); font-weight: 500; transition: all 0.3s; white-space: nowrap; }
-    .tab:hover { color: white; background: rgba(255,255,255,0.05); }
-    .tab.active { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
+.week-grid { display: flex; flex-direction: column; gap: 1rem; }
+.week-header { font-size: 12px; font-weight: 600; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: 0.1em; padding: 1.5rem 0 0.5rem; border-bottom: 1px solid var(--color-border-primary); margin-top: 1rem; display: flex; align-items: center; gap: 8px; }
+.week-header::before { content: ''; width: 6px; height: 6px; background: var(--color-primary); border-radius: 50%; box-shadow: 0 0 8px var(--color-primary); }
 
-    .panel { display: none; padding: 2rem; animation: fadeIn 0.4s ease forwards; }
-    .panel.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.day-card { background: rgba(0,0,0,0.2); border: 1px solid var(--color-border-primary); border-radius: 16px; padding: 1.5rem; cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; }
+.day-card::before { content: ''; position: absolute; left: 0; top: 0; height: 100%; width: 4px; background: var(--color-primary); opacity: 0; transition: opacity 0.3s; }
+.day-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.15); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.day-card:hover::before { opacity: 1; }
 
-    /* Overview Stats */
-    .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 15px; text-align: center; transition: transform 0.2s; }
-    .stat-card:hover { transform: translateY(-5px); background: rgba(255,255,255,0.06); }
-    .stat-n { font-size: 2.5rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; text-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
-    .stat-l { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.day-card.done { opacity: 0.6; background: rgba(0,0,0,0.4); border-color: transparent; box-shadow: none; }
+.day-card.done::before { opacity: 1; background: var(--color-success); box-shadow: 0 0 10px var(--color-success); }
+.day-card.done:hover { opacity: 0.8; transform: translateY(-2px); }
+.day-card.today { border: 2px solid var(--color-primary); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
 
-    /* Grade Bars */
-    .grade-bar { background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; border: 1px solid var(--glass-border); }
-    .grade-label { font-weight: 600; margin-bottom: 0.75rem; display: flex; justify-content: space-between;}
-    .bar-track { height: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; margin-bottom: 0.75rem; }
-    .bar-fill { height: 100%; border-radius: 10px; transition: width 1s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
-    .bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 50%, rgba(255,255,255,0) 100%); animation: shimmer 2s infinite; }
-    @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-    .grade-c .bar-fill { background: linear-gradient(90deg, #64748b, #94a3b8); width: 50%; }
-    .grade-b .bar-fill { background: linear-gradient(90deg, #2563eb, #3b82f6); width: 65%; }
-    .grade-a .bar-fill { background: linear-gradient(90deg, #059669, #10b981); width: 80%; }
-    .bar-note { font-size: 0.85rem; color: var(--text-muted); }
+.day-top { display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.day-date { font-size: 13px; font-weight: 600; color: var(--color-primary); min-width: 90px; }
+.day-title { font-size: 16px; font-weight: 500; color: var(--color-text-main); flex: 1; line-height: 1.4; }
+.day-tag { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 12px; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px; border: 1px solid rgba(255,255,255,0.1); }
 
-    /* Timeline */
-    .timeline { margin-top: 2rem; position: relative; padding-left: 20px; }
-    .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 2px; background: var(--glass-border); }
-    .phase { position: relative; padding-bottom: 2rem; padding-left: 1.5rem; }
-    .phase::before { content: ''; position: absolute; left: -25px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary); border: 2px solid var(--bg-color); }
-    .phase.p2::before { background: var(--secondary); box-shadow: 0 0 10px var(--secondary); }
-    .phase.p3::before { background: var(--accent); box-shadow: 0 0 10px var(--accent); }
-    .phase-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 0.25rem; color: white; }
-    .phase-dates { font-size: 0.85rem; color: var(--primary); margin-bottom: 0.75rem; font-weight: 500; }
-    .phase.p2 .phase-dates { color: var(--secondary); }
-    .phase.p3 .phase-dates { color: var(--accent); }
+.tag-mech { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3); }
+.tag-elec { background: rgba(52, 211, 153, 0.15); color: #34d399; border-color: rgba(52, 211, 153, 0.3); }
+.tag-wave { background: rgba(167, 139, 250, 0.15); color: #a78bfa; border-color: rgba(167, 139, 250, 0.3); }
+.tag-fields { background: rgba(251, 191, 36, 0.15); color: #fbbf24; border-color: rgba(251, 191, 36, 0.3); }
+.tag-fm { background: rgba(251, 146, 60, 0.15); color: #fb923c; border-color: rgba(251, 146, 60, 0.3); }
+.tag-therm { background: rgba(156, 163, 175, 0.15); color: #9ca3af; border-color: rgba(156, 163, 175, 0.3); }
+.tag-nuc { background: rgba(232, 121, 249, 0.15); color: #e879f9; border-color: rgba(232, 121, 249, 0.3); }
+.tag-part { background: rgba(148, 163, 184, 0.15); color: #94a3b8; border-color: rgba(148, 163, 184, 0.3); }
+.tag-med { background: rgba(244, 63, 94, 0.15); color: #f43f5e; border-color: rgba(244, 63, 94, 0.3); }
+.tag-paper { background: rgba(255, 255, 255, 0.1); color: #f8fafc; border-color: rgba(255, 255, 255, 0.2); }
+.tag-rest { background: transparent; color: #94a3b8; border-color: #475569; }
+.tag-exam { background: #ef4444; color: #ffffff; animation: pulse 2s infinite; border-color: #ef4444; }
 
-    /* Topics styling */
-    .paper-header { margin: 2rem 0 1rem; display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 12px; }
-    .paper-pill { padding: 0.4rem 1rem; border-radius: 20px; font-weight: 600; font-size: 0.85rem; letter-spacing: 0.5px; }
-    .pill-1 { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.5); }
-    .pill-2 { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border: 1px solid rgba(16, 185, 129, 0.5); }
-    .pill-3 { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.5); }
-    
-    .topic-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
-    .topic-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.25rem; cursor: pointer; transition: all 0.3s; display: flex; flex-direction: column; height: 100%; position: relative; overflow: hidden; }
-    .topic-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--primary); opacity: 0; transition: opacity 0.3s; }
-    .topic-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-    .topic-card:hover::before { opacity: 1; }
-    
-    .topic-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
-    .topic-num { background: rgba(255,255,255,0.1); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; color: white; }
-    .topic-title { font-weight: 600; font-size: 1.05rem; }
-    .topic-tags { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; flex-grow: 1; }
-    
-    .diff { margin-top: 1rem; align-self: flex-start; font-size: 0.75rem; padding: 0.3rem 0.8rem; border-radius: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
-    .ok { background: rgba(16, 185, 129, 0.15); color: #34d399; }
-    .med { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
-    .hard { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-    /* Plan & Tips */
-    .day-row { display: flex; flex-direction: column; padding: 1rem; background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); border-radius: 12px; margin-bottom: 0.5rem; transition: background 0.2s; cursor: pointer; }
-    .day-row-header { display: flex; align-items: center; gap: 1rem; width: 100%; }
-    .day-row:hover { background: rgba(255,255,255,0.05); }
-    .day-label { font-weight: 700; width: 45px; color: var(--primary); text-transform: uppercase; font-size: 0.9rem; }
-    .day-task { flex: 1; font-size: 0.95rem; line-height: 1.4; color: var(--text-main); font-weight: 500;}
-    .day-hrs { background: rgba(255,255,255,0.1); padding: 0.3rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; }
-    .wknd { opacity: 0.6; }
-    .wknd .day-label { color: var(--text-muted); }
-    .day-expand-icon { transition: transform 0.3s ease; color: var(--text-muted); }
-    .day-row.expanded .day-expand-icon { transform: rotate(180deg); }
-    .day-details { max-height: 0; overflow: hidden; transition: max-height 0.3s ease, margin-top 0.3s ease, opacity 0.3s ease; opacity: 0; padding-left: 60px; color: var(--text-muted); font-size: 0.9rem; }
-    .day-row.expanded .day-details { max-height: 500px; margin-top: 1rem; opacity: 1; }
-    .day-details ul { margin-left: 1.5rem; margin-top: 0.5rem; list-style-type: disc; }
-    .day-details li { margin-bottom: 0.25rem; }
+.checklist { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; }
+.check-item { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: var(--color-text-secondary); line-height: 1.5; padding: 8px 12px; border-radius: 10px; transition: background 0.2s; background: rgba(255,255,255,0.02); }
+.check-item:hover { background: rgba(255,255,255,0.05); }
 
-    .tip-card { background: rgba(0,0,0,0.2); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 15px; margin-bottom: 1rem; position: relative; overflow: hidden; }
-    .tip-card::before { content: '\f0eb'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: -15px; top: -15px; font-size: 5rem; color: rgba(255,255,255,0.03); transform: rotate(15deg); }
-    .tip-title { font-size: 1.1rem; font-weight: 600; color: white; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
-    .tip-title::before { content: ''; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+.check-item input[type=checkbox] { 
+  margin-top: 4px; 
+  flex-shrink: 0; 
+  cursor: pointer; 
+  appearance: none; 
+  width: 20px; 
+  height: 20px; 
+  border: 2px solid var(--color-border-secondary); 
+  border-radius: 6px; 
+  background: rgba(0,0,0,0.2); 
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
+  display: grid; 
+  place-content: center;
+}
+.check-item input[type=checkbox]::before {
+  content: "";
+  width: 12px;
+  height: 12px;
+  transform: scale(0);
+  transition: 120ms transform cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 1em 1em white;
+  background-color: white;
+  transform-origin: center;
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+}
+.check-item input[type=checkbox]:hover { border-color: var(--color-primary); }
+.check-item input[type=checkbox]:checked { background: var(--color-primary); border-color: var(--color-primary); box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+.check-item input[type=checkbox]:checked::before { transform: scale(1); }
 
-    @media (max-width: 900px) {
-      .container { grid-template-columns: 1fr; }
-      .sidebar { order: -1; }
-      .stat-row { grid-template-columns: 1fr; }
-    }
-  </style>
+.check-item.checked-item label { text-decoration: line-through; color: var(--color-text-tertiary); opacity: 0.7; }
+.check-item label { cursor: pointer; flex: 1; transition: color 0.2s; font-weight: 300; }
+
+.day-hours { font-size: 13px; font-weight: 500; color: var(--color-text-tertiary); margin-top: 1.25rem; padding-top: 1rem; border-top: 1px dashed var(--color-border-secondary); display: flex; align-items: center; gap: 8px; }
+.day-hours::before { content: '\f017'; font-family: "Font Awesome 6 Free"; font-weight: 400; color: var(--color-primary); }
+
+@media (max-width: 768px) {
+  .app-container { padding: 1.5rem; }
+  .stat-strip { grid-template-columns: 1fr 1fr; }
+  .nav-row { flex-direction: column; }
+}
+</style>
 </head>
 <body>
 
-<div class="container">
-  
-  <!-- SIDEBAR: Tools -->
-  <aside class="sidebar">
-    <div class="glass widget">
-      <div class="widget-title"><i class="fa-regular fa-clock"></i> Current Time</div>
-      <div class="clock-display" id="live-clock">00:00:00</div>
-      <div class="date-display" id="live-date">Monday, 1 Jan</div>
-    </div>
+<div class="app-container">
+  <div class="app-header">
+    <h1 class="app-title">Physics Revision Plan</h1>
+    <p class="app-subtitle">AQA A-Level Physics Command Centre</p>
+  </div>
 
-    <div class="glass widget">
-      <div class="widget-title"><i class="fa-solid fa-stopwatch"></i> Focus Timer</div>
-      <div class="pomodoro-display" id="pomodoro-time">25:00</div>
-      <div class="pomodoro-controls">
-        <button class="btn" id="pom-start"><i class="fa-solid fa-play"></i> Start</button>
-        <button class="btn btn-secondary" id="pom-pause"><i class="fa-solid fa-pause"></i></button>
-        <button class="btn btn-secondary" id="pom-reset"><i class="fa-solid fa-rotate-right"></i></button>
-      </div>
-      <div style="display:flex; justify-content:center; gap:0.5rem; margin-top:1rem;">
-        <span style="font-size:0.8rem; cursor:pointer; color:var(--text-muted);" onclick="setPomodoro(25)">25m Work</span>
-        <span style="font-size:0.8rem; cursor:pointer; color:var(--text-muted);" onclick="setPomodoro(5)">5m Break</span>
-      </div>
-    </div>
+  <div class="method-box">
+    <strong><i class="fa-solid fa-stopwatch" style="margin-right:6px;"></i> Recommended Method: Modified Pomodoro</strong> — Standard 25/5 is too short for physics. Use <strong>50 min on / 10 min off</strong>, with a 30-min break after every 2 blocks. Each session = 1 task below. On school days do 3–4 blocks in the evening. Easter: 6–8 blocks per day. This gives deeper focus without burnout.
+  </div>
 
-    <div class="glass widget">
-      <div class="widget-title"><i class="fa-solid fa-list-check"></i> Study Checklist</div>
-      <input type="text" id="todo-input" class="todo-input" placeholder="Add a quick task... (Press Enter)">
-      <div class="todo-list" id="todo-list">
-        <!-- Todos inserted via JS -->
-      </div>
-    </div>
-  </aside>
+  <div class="stat-strip">
+    <div class="stat-c"><div class="stat-n" id="s-total">70</div><div class="stat-l">Days total</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-done">0</div><div class="stat-l">Days done</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-remain">51</div><div class="stat-l">To exam 1</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-pct">0%</div><div class="stat-l">Complete</div></div>
+  </div>
 
-  <!-- MAIN AREA -->
-  <main class="main-content">
-    
-    <header class="glass header-card">
-      <h1>AQA A-Level Physics</h1>
-      <p style="color: var(--text-muted); font-size: 1.1rem; margin-top: 0.5rem;">Your ultimate command centre for top grades.</p>
-    </header>
+  <div class="prog-wrap">
+    <div class="prog-label"><span>Overall Progress</span><span id="prog-txt">0 / 70 days checked off</span></div>
+    <div class="prog-track"><div class="prog-fill" id="prog-bar" style="width:0%"></div></div>
+  </div>
 
-    <div class="tabs glass">
-      <div class="tab active" onclick="show('overview', this)"><i class="fa-solid fa-chart-line"></i> Overview</div>
-      <div class="tab" onclick="show('topics', this)"><i class="fa-solid fa-book"></i> All Topics</div>
-      <div class="tab" onclick="show('plan', this)"><i class="fa-solid fa-calendar-week"></i> Easter Plan</div>
-      <div class="tab" onclick="show('tips', this)"><i class="fa-solid fa-lightbulb"></i> Exam Tips</div>
-    </div>
+  <div class="nav-row">
+    <button class="phase-btn active" onclick="showPhase(0)">Phase 0 — Easter</button>
+    <button class="phase-btn" onclick="showPhase(1)">Phase 1 — School</button>
+    <button class="phase-btn" onclick="showPhase(2)">Phase 2 — Final Push</button>
+    <button class="phase-btn" onclick="showPhase(3)">Phase 3 — Between Exams</button>
+    <button class="phase-btn" onclick="showPhase(4)">Phase 4 — Exam Days</button>
+  </div>
 
-    <!-- OVERVIEW -->
-    <div id="panel-overview" class="panel glass active">
-      <div class="stat-row">
-        <div class="stat-card">
-          <div class="stat-n" id="countdown-p1">--</div>
-          <div class="stat-l">To Paper 1 (28 May)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-n" id="countdown-p2">--</div>
-          <div class="stat-l">To Paper 2 (1 Jun)</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-n" id="countdown-p3">--</div>
-          <div class="stat-l">To Paper 3 (8 Jun)</div>
-        </div>
-      </div>
-
-      <h3 style="margin-top:2rem; margin-bottom:1.5rem;">Grade Trajectory</h3>
-      <div class="grade-bar grade-c">
-        <div class="grade-label"><span>Grade C — Your Floor</span> <span style="font-weight:400; color:var(--text-muted);">≈50% UMS</span></div>
-        <div class="bar-track"><div class="bar-fill"></div></div>
-        <div class="bar-note">Secure with solid Paper 1 + 2 basics and Medical Physics fundamentals</div>
-      </div>
-      <div class="grade-bar grade-b">
-        <div class="grade-label"><span>Grade B — Realistic Stretch</span> <span style="font-weight:400; color:var(--text-muted);">≈60% UMS</span></div>
-        <div class="bar-track"><div class="bar-fill"></div></div>
-        <div class="bar-note">Requires understanding application questions, not just recall. Achievable in 59 days.</div>
-      </div>
-      <div class="grade-bar grade-a">
-        <div class="grade-label"><span>Grade A — Target Grade</span> <span style="font-weight:400; color:var(--text-muted);">≈80% UMS</span></div>
-        <div class="bar-track"><div class="bar-fill"></div></div>
-        <div class="bar-note">Needs consistent past paper practice + near-full topic coverage. Ambitious but possible.</div>
-      </div>
-
-      <h3 style="margin-top:2.5rem;">Attack Plan Phases</h3>
-      <div class="timeline">
-        <div class="phase">
-          <div class="phase-title">Phase 1 — Easter Fortnight</div>
-          <div class="phase-dates">30 Mar – 12 Apr · Full-time revision window</div>
-          <div style="color:var(--text-muted); line-height:1.6;">Cover all Paper 1 topics (Topics 1–6) from scratch. 2 topics per day, afternoon past paper questions by topic. This is your most important window.</div>
-        </div>
-        <div class="phase p2">
-          <div class="phase-title">Phase 2 — Back at School</div>
-          <div class="phase-dates">13 Apr – 9 May · Evenings + weekends</div>
-          <div style="color:var(--text-muted); line-height:1.6;">Cover Paper 2 topics (Topics 6–8) in evenings. Do one full timed past paper per weekend. Medical Physics on weekends in May.</div>
-        </div>
-        <div class="phase p3">
-          <div class="phase-title">Phase 3 — Final Push</div>
-          <div class="phase-dates">10 May – 27 May · High intensity consolidation</div>
-          <div style="color:var(--text-muted); line-height:1.6;">Past papers only. Mark, identify weak spots, targeted re-revision. Consolidate formula sheet. Sleep and eat well — performance matters.</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- TOPICS -->
-    <div id="panel-topics" class="panel glass">
-      
-      <!-- PAPER 1 -->
-      <div class="paper-header">
-        <span class="paper-pill pill-1">Paper 1</span>
-        <span style="font-weight:600;">Measurements, Particles, Waves, Mechanics, Electricity + Further Mechanics</span>
-      </div>
-      <div class="topic-grid">
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">1</span>
-            <div class="diff ok">Quick win</div>
-          </div>
-          <div class="topic-title">Measurements & errors</div>
-          <div class="topic-tags">Uncertainties, SI units, significant figures, random vs systematic errors</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">2</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Particles & radiation</div>
-          <div class="topic-tags">Quarks, leptons, exchange particles, photoelectric effect, wave-particle duality</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">3</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Waves</div>
-          <div class="topic-tags">Stationary waves, diffraction, interference, refraction, optical fibres</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">4</span>
-            <div class="diff hard">Hard</div>
-          </div>
-          <div class="topic-title">Mechanics & materials</div>
-          <div class="topic-tags">Vectors, moments, projectiles, Newton's laws, Young's modulus, stress/strain</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">5</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Electricity</div>
-          <div class="topic-tags">Current, resistance, EMF, internal resistance, I-V characteristics, circuits</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">6a</span>
-            <div class="diff hard">Hard</div>
-          </div>
-          <div class="topic-title">Further mechanics (P1)</div>
-          <div class="topic-tags">Momentum, circular motion, simple harmonic motion</div>
-        </div>
-      </div>
-
-      <!-- PAPER 2 -->
-      <div class="paper-header" style="margin-top:2.5rem;">
-        <span class="paper-pill pill-2">Paper 2</span>
-        <span style="font-weight:600;">Further Mechanics, Thermal, Fields, Nuclear</span>
-      </div>
-      <div class="topic-grid">
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">6b</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Thermal physics</div>
-          <div class="topic-tags">Specific heat, latent heat, ideal gas law, kinetic theory, Brownian motion</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">7</span>
-            <div class="diff hard">Hardest Topic</div>
-          </div>
-          <div class="topic-title">Fields & consequences</div>
-          <div class="topic-tags">Gravity, electric fields, capacitors, magnetic fields, electromagnetic induction</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">8</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Nuclear physics</div>
-          <div class="topic-tags">Radioactive decay, half-life, binding energy, fission, fusion</div>
-        </div>
-      </div>
-
-      <!-- PAPER 3 -->
-      <div class="paper-header" style="margin-top:2.5rem;">
-        <span class="paper-pill pill-3">Paper 3</span>
-        <span style="font-weight:600;">Practical skills + Medical Physics (Topic 10)</span>
-      </div>
-      <div class="topic-grid">
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">P</span>
-            <div class="diff ok">High Reward</div>
-          </div>
-          <div class="topic-title">Practical skills (Sec A)</div>
-          <div class="topic-tags">Data analysis, graph skills, uncertainty, experimental design (comes from practicals)</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">10.1</span>
-            <div class="diff ok">Good Marks</div>
-          </div>
-          <div class="topic-title">Physics of eye & ear</div>
-          <div class="topic-tags">Lenses, defects of vision, dioptres, threshold of hearing, intensity</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">10.2</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Imaging tech</div>
-          <div class="topic-tags">X-rays, CT, ultrasound A/B-scans, acoustic impedance, MRI principles</div>
-        </div>
-        <div class="topic-card">
-          <div class="topic-header">
-            <span class="topic-num">10.3</span>
-            <div class="diff med">Medium</div>
-          </div>
-          <div class="topic-title">Nuclear medicine</div>
-          <div class="topic-tags">Gamma cameras, PET scans, tracers, radiotherapy, radiation dose</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- EASTER PLAN -->
-    <div id="panel-plan" class="panel glass">
-      <div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--primary); padding: 1.25rem; border-radius: 8px; margin-bottom: 2rem; color: #bae6fd; font-size: 0.95rem; line-height: 1.6;">
-        <i class="fa-solid fa-bullseye" style="margin-right:8px;"></i> Aim for 5–6 hours of quality revision per day. Split into morning (new content) and afternoon (past paper Qs). Take Sunday afternoons off to recover.
-      </div>
-
-      <h3 style="color:var(--primary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Week 1 — 30 Mar to 5 Apr</h3>
-      
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Mon</div>
-          <div class="day-task">Topic 1 (Measurements) + 2 (Particles)</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Foundation knowledge and calculation practice.
-          <ul>
-            <li>Morning: Topic 1 Notes (Errors, Units, Uncertainties).</li>
-            <li>Morning: Topic 2 Notes (Constituents of atom, particles, radiation).</li>
-            <li>Afternoon: Complete 30+ past paper questions from Physics & Maths Tutor (PMT).</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Tue</div>
-          <div class="day-task">Topic 3 (Waves) — stationary waves, diffraction.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Visualizing waves and interference.
-          <ul>
-            <li>Morning: Revise stationary waves, diffraction gratings, and refraction.</li>
-            <li>Morning: Review optical fibres material.</li>
-            <li>Afternoon: 20 past paper questions focusing on 6-mark explanations.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Wed</div>
-          <div class="day-task">Topic 4 (Mechanics) — vectors, projectiles, Newton's laws.</div>
-          <div class="day-hrs">6h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Resolving vectors and practicing kinetics equations.
-          <ul>
-            <li>Morning: Vector resolution practice.</li>
-            <li>Morning: SUVAT equations for projectile motion.</li>
-            <li>Afternoon: Tricky Newton's laws and moments PMT questions.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Thu</div>
-          <div class="day-task">Topic 4 cont. + begin Topic 5 (Electricity).</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Materials property calculations and basic circuits.
-          <ul>
-            <li>Morning: Stress, strain, Young's modulus formulas.</li>
-            <li>Afternoon: Current, voltage, resistance, resistivity.</li>
-            <li>Evening: Memorize the I-V characteristics for components.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Fri</div>
-          <div class="day-task">Topic 5 (Electricity) finish — EMF, circuit problems.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Internal resistance and potential dividers.
-          <ul>
-            <li>Morning: Kirchhoff's laws application.</li>
-            <li>Morning: EMF and internal resistance graph questions.</li>
-            <li>Afternoon: Potential divider circuit past paper questions.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label" style="color:#f43f5e">Sat</div>
-          <div class="day-task">Full timed Paper 1 past paper (2 hrs).</div>
-          <div class="day-hrs">4h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Exam technique and timing under pressure.
-          <ul>
-            <li>Morning: Sit a complete Paper 1 under strict exam conditions (2 hours).</li>
-            <li>Afternoon: Brutally mark the paper using the official mark scheme.</li>
-            <li>Evening: Create flashcards for mistakes and identify weakest topic.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row wknd" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Sun</div>
-          <div class="day-task">Rest / light review of flashcards.</div>
-          <div class="day-hrs">—</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Recovery and passive recall.
-          <ul>
-            <li>Review flashcards made on Saturday.</li>
-            <li>Sleep and relax to avoid burnout.</li>
-          </ul>
-        </div>
-      </div>
-
-      <h3 style="color:var(--secondary); font-size:1.1rem; text-transform:uppercase; letter-spacing:1px; margin-top:2.5rem; margin-bottom:1rem;">Week 2 — 6 Apr to 12 Apr</h3>
-      
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Mon</div>
-          <div class="day-task">Topic 6a (Further mechanics) — momentum, circular motion.</div>
-          <div class="day-hrs">6h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Getting to grips with Paper 2 mechanics.
-          <ul>
-            <li>Morning: Momentum conservation and impulse.</li>
-            <li>Morning: Circular motion formulas (radians, angular speed).</li>
-            <li>Afternoon: Complete circular motion past paper questions.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Tue</div>
-          <div class="day-task">Topic 6a cont. + SHM practice questions.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Simple Harmonic Motion (SHM) systems.
-          <ul>
-            <li>Morning: SHM definitions, equations, and graphs.</li>
-            <li>Morning: Mass-spring systems and simple pendulums.</li>
-            <li>Afternoon: Resonance and damping 6-mark questions.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Wed</div>
-          <div class="day-task">Medical Physics 10.1 — eye & ear.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Paper 3 option starting.
-          <ul>
-            <li>Morning: Physics of vision, lenses, myopia/hypermetropia, astigmatism.</li>
-            <li>Afternoon: Physics of hearing, human ear structure, intensity level, dBA scale.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Thu</div>
-          <div class="day-task">Medical Physics 10.2 — X-rays, ultrasound, MRI.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Imaging principles and comparing modalities.
-          <ul>
-            <li>Morning: X-ray production, attenuation, CT scans.</li>
-            <li>Afternoon: Ultrasound generators, A-scan vs B-scan, acoustic impedance.</li>
-            <li>Evening: Basic principles of MR scanning.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Fri</div>
-          <div class="day-task">Medical Physics 10.3 — nuclear medicine, PET.</div>
-          <div class="day-hrs">5h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Radioactivity in a medical context.
-          <ul>
-            <li>Morning: Half-life (physical, biological, effective).</li>
-            <li>Morning: Gamma cameras, Tc-99m tracer, PET scans and annihilation.</li>
-            <li>Afternoon: Radiotherapy (high energy X-rays, implants).</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label" style="color:#f43f5e">Sat</div>
-          <div class="day-task">Full timed Paper 3 Medical Physics past paper.</div>
-          <div class="day-hrs">4h</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Applying Option knowledge + Practical Skills (Section A).
-          <ul>
-            <li>Morning: Do a complete Paper 3 (Section A and Section B Medical Physics).</li>
-            <li>Afternoon: Mark scheme review and spot common practical skill traps.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="day-row wknd" onclick="this.classList.toggle('expanded')">
-        <div class="day-row-header">
-          <div class="day-label">Sun</div>
-          <div class="day-task">Formulas review + rest. Prep for school.</div>
-          <div class="day-hrs">—</div>
-          <i class="fa-solid fa-chevron-down day-expand-icon"></i>
-        </div>
-        <div class="day-details">
-          Focus: Recharging before the new term.
-          <ul>
-            <li>1 hour reviewing the data booklet and writing out derived formulas.</li>
-            <li>Organize notes for the return to school.</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- TIPS -->
-    <div id="panel-tips" class="panel glass">
-      <div class="tip-card">
-        <div class="tip-title">PMT is your main resource</div>
-        <div style="color:var(--text-muted); line-height:1.6;">physicsandmathstutor.com has AQA past paper questions sorted by topic. This is the best revision tool — do questions by topic until the last 2 weeks. Use A Level Physics Online for video explainers.</div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-title">Master the formula sheet</div>
-        <div style="color:var(--text-muted); line-height:1.6;">Know exactly what's in your AQA data booklet. Stop memorising things that are given to you, and focus on those that aren't (wave speed eq, de Broglie, specific electrical formulas).</div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-title">Paper 3 Section A = Free Marks</div>
-        <div style="color:var(--text-muted); line-height:1.6;">Tests practical skills — plotting graphs, identifying errors, improvements. Practice drawing best-fit lines with error bars. Learn keywords like "anomalous result", "systematic error".</div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-title">Respect Fields (Topic 7)</div>
-        <div style="color:var(--text-muted); line-height:1.6;">Gravitational, electric, and magnetic fields naturally follow similar patterns. Capacitors and EM induction especially need worked examples, not just notes. Allocate extra time here.</div>
-      </div>
-      <div class="tip-card">
-        <div class="tip-title">Show EVERY step</div>
-        <div style="color:var(--text-muted); line-height:1.6;">AQA gives method marks. Even with a wrong final answer, you can get 2/3 marks by writing the correct formula and substituting values. "By inspection" skips cost marks!</div>
-      </div>
-    </div>
-
-  </main>
+  <div id="phase-panels"></div>
 </div>
 
 <script>
-  // Tab Navigation
-  function show(id, element) {
-    document.querySelectorAll('.panel').forEach(p => {
-      p.classList.remove('active');
-      p.style.display = 'none';
+const DAYS = [
+  {phase:0,date:"Mon 30 Mar",title:"Mechanics: vectors, scalars & resolving forces",tag:"tag-mech",tagLabel:"Mechanics",hours:"6h / 7 blocks",checks:["Read PMT notes: scalars vs vectors, resolving components","Make a formula card: F=ma, components, tan/sin/cos relationships","Watch A Level Physics Online video on resolving forces","Do 10 PMT questions on resolving + vector addition","Active recall: close notes, write out every formula from memory","Evening: re-read notes you made today"]},
+  {phase:0,date:"Tue 31 Mar",title:"Mechanics: moments, equilibrium & free body diagrams",tag:"tag-mech",tagLabel:"Mechanics",hours:"6h / 7 blocks",checks:["Read PMT notes: principle of moments, couples, torque","Draw 5 free body diagrams from scratch for different scenarios","Formula card: moment = Fd, conditions for equilibrium","15 PMT questions on moments & equilibrium","Flashcards: define moment, couple, equilibrium conditions","Review yesterday's formula card"]},
+  {phase:0,date:"Wed 1 Apr",title:"Mechanics: projectile motion & Newton's laws",tag:"tag-mech",tagLabel:"Mechanics",hours:"6h / 7 blocks",checks:["Read PMT notes: Newton's 1st, 2nd, 3rd laws + projectile motion","Formula card: SUVAT equations — all 5, when to use each","Work through 3 projectile worked examples step by step","15 PMT questions on projectiles & Newton's laws","Key skill: always split projectiles into horizontal + vertical components separately","Active recall quiz: name all 5 SUVAT equations unaided"]},
+  {phase:0,date:"Thu 2 Apr",title:"Mechanics: work, energy & power",tag:"tag-mech",tagLabel:"Mechanics",hours:"6h / 7 blocks",checks:["Read PMT notes: work done, KE, GPE, conservation of energy","Formula card: W=Fd cosθ, KE=½mv², GPE=mgh, P=Fv","15 PMT questions on energy & power","Understand efficiency: always express as a fraction or %","Practise: sketch energy transfer diagrams for a roller coaster","Active recall: derive KE formula from work-energy theorem"]},
+  {phase:0,date:"Fri 3 Apr",title:"Mechanics: stress, strain & Young's modulus",tag:"tag-mech",tagLabel:"Mechanics",hours:"6h / 7 blocks",checks:["Read PMT notes: stress, strain, Young's modulus, Hooke's law","Formula card: σ=F/A, ε=ΔL/L, E=σ/ε, F=kx","Draw and label a stress-strain graph — mark elastic limit, UTS, fracture","10 PMT questions on Young's modulus calculations","Understand difference: brittle vs ductile vs plastic behaviour","Active recall: sketch a stress-strain curve from memory"]},
+  {phase:0,date:"Sat 4 Apr",title:"Mechanics: FULL past paper practice session",tag:"tag-paper",tagLabel:"Past paper",hours:"4h",checks:["Do 1 full set of PMT topic questions on ALL of mechanics (timed)","Mark your answers using mark scheme — be strict","For every wrong answer: find the rule you broke and write it down","Make a 'weak spots' list — topics to revisit","Review your formula card and update anything missing","Rest for the evening — no more revision"]},
+  {phase:0,date:"Sun 5 Apr",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest — no physics","Light review of formula cards if you want (optional, 15 min max)","Plan your week ahead mentally","Sleep well"]},
+  {phase:0,date:"Mon 6 Apr",title:"Electricity: current, charge, pd & resistance",tag:"tag-elec",tagLabel:"Electricity",hours:"6h / 7 blocks",checks:["Read PMT notes: current, charge, potential difference, resistance","Formula card: I=Q/t, V=IR, R=ρL/A, P=IV=I²R=V²/R","Understand drift velocity and why it's slow","15 PMT questions on basic electricity","Draw I-V characteristics for: resistor, bulb, diode — from memory","Active recall: explain what resistance physically means"]},
+  {phase:0,date:"Tue 7 Apr",title:"Electricity: series & parallel circuits + internal resistance",tag:"tag-elec",tagLabel:"Electricity",hours:"6h / 7 blocks",checks:["Read PMT notes: series/parallel rules, EMF, internal resistance","Formula card: EMF = V + Ir, series/parallel resistor rules","Work through 3 circuit problems with internal resistance from scratch","15 PMT questions on circuits","Key understanding: terminal pd drops as current increases — know why","Sketch a V vs I graph for a cell — mark EMF and lost volts"]},
+  {phase:0,date:"Wed 8 Apr",title:"Electricity: resistivity, semiconductors & full topic review",tag:"tag-elec",tagLabel:"Electricity",hours:"5h / 6 blocks",checks:["Read PMT notes: resistivity, NTC thermistors, LDRs","Formula card: R=ρL/A — know what each variable is","Understand how temperature affects resistance in metals vs semiconductors","15 PMT questions on resistivity and components","FULL electricity topic review — re-read all notes from Mon–Wed","Active recall: 10 minute blank page — write everything you know about electricity"]},
+  {phase:0,date:"Thu 9 Apr",title:"Waves: progressive waves & wave properties",tag:"tag-wave",tagLabel:"Waves",hours:"6h / 7 blocks",checks:["Read PMT notes: transverse vs longitudinal, wavelength, frequency, speed","Formula card: v=fλ, T=1/f, intensity ∝ amplitude²","Understand phase difference — know what 'in phase' and 'antiphase' mean","15 PMT questions on wave properties","Draw a transverse wave and label: amplitude, wavelength, crest, trough","Active recall: define all wave quantities without notes"]},
+  {phase:0,date:"Fri 10 Apr",title:"Waves: superposition, interference & stationary waves",tag:"tag-wave",tagLabel:"Waves",hours:"6h / 7 blocks",checks:["Read PMT notes: superposition, path difference, constructive/destructive interference","Formula card: path difference = nλ (constructive), (n+½)λ (destructive)","Draw stationary wave diagrams: label nodes and antinodes","15 PMT questions on interference and stationary waves","Understand: stationary waves store energy, progressive waves transfer it","Active recall: explain how a standing wave forms on a string"]},
+  {phase:0,date:"Sat 11 Apr",title:"Waves: refraction, diffraction, EM spectrum & optics",tag:"tag-wave",tagLabel:"Waves",hours:"5h / 6 blocks",checks:["Read PMT notes: Snell's law, total internal reflection, diffraction","Formula card: n=sinθ₁/sinθ₂, critical angle sinC=1/n","Understand conditions for TIR — used in optical fibres","15 PMT questions on refraction and diffraction","Learn EM spectrum order: radio → micro → IR → visible → UV → X → gamma","Active recall: derive the critical angle formula from Snell's law"]},
+  {phase:0,date:"Sun 12 Apr",title:"Waves past paper + rest",tag:"tag-paper",tagLabel:"Past paper",hours:"3h then rest",checks:["Morning: 20 timed PMT questions across ALL waves topics","Mark strictly, write down every mistake","Update weak spots list","Afternoon/evening: full rest — Easter is over tomorrow, school returns"]},
+  {phase:1,date:"Mon 13 Apr",title:"Back to school — Fields: gravitational fields",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: gravitational field strength g=F/m, Newton's law of gravitation","Formula card: F=GMm/r², g=GM/r², gravitational potential φ=-GM/r","5 PMT questions on gravitational fields","Note: field lines point towards mass — never away"]},
+  {phase:1,date:"Tue 14 Apr",title:"Fields: gravitational potential & orbital motion",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: gravitational potential, escape velocity, orbital speed","Formula card: v=√(GM/r), T²∝r³ (Kepler's 3rd law)","5 PMT questions on orbital motion","Understand: satellites in lower orbit move FASTER — know why"]},
+  {phase:1,date:"Wed 15 Apr",title:"Fields: electric fields",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: electric field strength E=F/Q, Coulomb's law","Formula card: E=kQ/r², V=kQ/r, F=kQq/r²","5 PMT questions on electric fields","Compare to gravity: both inverse square, but electric can repel"]},
+  {phase:1,date:"Thu 16 Apr",title:"Fields: electric potential & capacitors intro",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: electric potential, capacitance, C=Q/V","Formula card: E=½QV=½CV²=Q²/2C, C=εA/d","5 PMT questions on capacitance","Draw E-field and equipotential lines for point charge"]},
+  {phase:1,date:"Fri 17 Apr",title:"Fields: capacitor charge/discharge",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: charging/discharging equations, time constant","Formula card: Q=Q₀e^(-t/RC), τ=RC","5 PMT questions on capacitor discharge","Sketch charge vs time and voltage vs time graphs — know the shape"]},
+  {phase:1,date:"Sat 18 Apr",title:"Fields: magnetic fields & motor effect",tag:"tag-fields",tagLabel:"Fields",hours:"4h / 5 blocks",checks:["Read PMT notes: magnetic flux density, force on a conductor F=BIL","Formula card: F=BILsinθ, F=BQv, B=μ₀I/2πr","10 PMT questions on magnetic forces","Use Fleming's Left Hand Rule — drill it until automatic","Understand: force is always perpendicular to both B and v"]},
+  {phase:1,date:"Sun 18 Apr",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Optional: 15 min flashcard review"]},
+  {phase:1,date:"Mon 20 Apr",title:"Fields: electromagnetic induction & Faraday's law",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: magnetic flux Φ=BAcosθ, Faraday's law, Lenz's law","Formula card: EMF = -NΔΦ/Δt","5 PMT questions on induction","Lenz's law: induced current OPPOSES the change — this is key"]},
+  {phase:1,date:"Tue 21 Apr",title:"Fields: alternating current & transformers",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Read PMT notes: AC, rms values, transformers","Formula card: Vrms=V₀/√2, Irms=I₀/√2, Vs/Vp=Ns/Np","5 PMT questions on AC and transformers","Understand why rms = peak/√2 — area under sin² curve"]},
+  {phase:1,date:"Wed 22 Apr",title:"Fields: full topic consolidation",tag:"tag-fields",tagLabel:"Fields",hours:"2h evening / 2 blocks",checks:["Blank page challenge: write everything you know about ALL fields topics","Make a comparison table: gravity vs electric field (formula, units, direction)","Identify your 2 weakest Fields sub-topics","5 questions on your weakest area"]},
+  {phase:1,date:"Thu 23 Apr",title:"Further Mechanics: momentum & collisions",tag:"tag-fm",tagLabel:"Further Mech",hours:"2h evening / 2 blocks",checks:["Read PMT notes: momentum p=mv, conservation of momentum, impulse","Formula card: impulse = FΔt = Δp, elastic vs inelastic collisions","5 PMT questions on momentum","Key: in elastic collision, KE is conserved. In inelastic, it is not."]},
+  {phase:1,date:"Fri 24 Apr",title:"Further Mechanics: circular motion",tag:"tag-fm",tagLabel:"Further Mech",hours:"2h evening / 2 blocks",checks:["Read PMT notes: angular velocity, centripetal acceleration","Formula card: ω=2πf, v=ωr, a=v²/r=ω²r, F=mv²/r","5 PMT questions on circular motion","Understand: centripetal force is not a new force — it's the NET inward force"]},
+  {phase:1,date:"Sat 25 Apr",title:"Further Mechanics: simple harmonic motion",tag:"tag-fm",tagLabel:"Further Mech",hours:"4h / 5 blocks",checks:["Read PMT notes: SHM definition, a=-ω²x, energy in SHM","Formula card: x=Acosωt, v=±ω√(A²-x²), T=2π√(l/g), T=2π√(m/k)","10 PMT questions on SHM","Sketch displacement, velocity, acceleration graphs vs time — show phase relationships","Key: at max displacement, v=0 and a=max. At equilibrium, v=max and a=0"]},
+  {phase:1,date:"Sun 26 Apr",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Optional: formula cards review"]},
+  {phase:1,date:"Mon 27 Apr",title:"Further Mechanics: resonance + Thermal: internal energy",tag:"tag-therm",tagLabel:"Thermal",hours:"2h evening / 2 blocks",checks:["Read PMT notes: resonance, damping, natural frequency","Read PMT notes: internal energy, specific heat capacity","Formula card: Q=mcΔT, first law of thermodynamics","5 questions combining FM and thermal"]},
+  {phase:1,date:"Tue 28 Apr",title:"Thermal: specific latent heat & ideal gases",tag:"tag-therm",tagLabel:"Thermal",hours:"2h evening / 2 blocks",checks:["Read PMT notes: latent heat, ideal gas law","Formula card: Q=mL, pV=nRT, pV=NkT","5 PMT questions on ideal gases","Understand: latent heat — temperature doesn't change during phase change"]},
+  {phase:1,date:"Wed 29 Apr",title:"Thermal: kinetic theory",tag:"tag-therm",tagLabel:"Thermal",hours:"2h evening / 2 blocks",checks:["Read PMT notes: kinetic theory, mean square speed, pressure formula","Formula card: pV=⅓Nm<c²>, ½m<c²>=3/2 kT","5 PMT questions on kinetic theory","Understand: temperature is a measure of average KE of particles"]},
+  {phase:1,date:"Thu 30 Apr",title:"Nuclear: radioactive decay & half-life",tag:"tag-nuc",tagLabel:"Nuclear",hours:"2h evening / 2 blocks",checks:["Read PMT notes: alpha, beta, gamma, decay equations","Formula card: N=N₀e^(-λt), t½=ln2/λ, A=λN","5 PMT questions on radioactive decay","Write balanced nuclear equations for α and β decay"]},
+  {phase:1,date:"Fri 1 May",title:"Nuclear: binding energy & nuclear reactions",tag:"tag-nuc",tagLabel:"Nuclear",hours:"2h evening / 2 blocks",checks:["Read PMT notes: mass defect, binding energy, E=mc²","Formula card: ΔE=Δmc², BE per nucleon graph shape","5 PMT questions on binding energy","Understand: fission splits heavy nuclei, fusion joins light ones — both release energy"]},
+  {phase:1,date:"Sat 2 May",title:"Nuclear: full topic + Particles: quantum intro",tag:"tag-nuc",tagLabel:"Nuclear",hours:"4h / 5 blocks",checks:["Read PMT notes: nuclear radius, density, safety","Read PMT notes: photon model, photoelectric effect","Formula card: E=hf, hf=φ+½mv²max, λ=h/mv (de Broglie)","10 PMT questions mixing nuclear and quantum","Understand: photoelectric effect PROVES light is quantised"]},
+  {phase:1,date:"Sun 3 May",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest — big week ahead"]},
+  {phase:1,date:"Mon 4 May",title:"Particles: quarks, leptons & classification",tag:"tag-part",tagLabel:"Particles",hours:"2h evening / 2 blocks",checks:["Read PMT notes: fundamental particles, quarks (u,d,s), leptons","Make a table: particle, charge, baryon number, lepton number","5 PMT questions on particle classification","Know: proton=uud, neutron=udd — these come up every year"]},
+  {phase:1,date:"Tue 5 May",title:"Particles: conservation laws & exchange particles",tag:"tag-part",tagLabel:"Particles",hours:"2h evening / 2 blocks",checks:["Read PMT notes: conservation of charge, baryon no., lepton no.","Read PMT notes: exchange particles — photon, W±, Z, gluon, pion","5 PMT questions on conservation laws","Practice: check if a decay equation is allowed using conservation laws"]},
+  {phase:1,date:"Wed 6 May",title:"Particles: antimatter, annihilation & pair production",tag:"tag-part",tagLabel:"Particles",hours:"2h evening / 2 blocks",checks:["Read PMT notes: antiparticles, annihilation, pair production","Formula card: pair production minimum energy = 2m₀c²","5 PMT questions on antimatter","Know: annihilation produces 2 photons of equal energy travelling in opposite directions"]},
+  {phase:1,date:"Thu 7 May",title:"Particles: full topic consolidation",tag:"tag-part",tagLabel:"Particles",hours:"2h evening / 2 blocks",checks:["Blank page challenge: write out the full particle classification table","Write out all conservation laws from memory","5 harder PMT questions on particles","Update weak spots list for particles"]},
+  {phase:1,date:"Fri 8 May",title:"Measurements: uncertainties & practical skills",tag:"tag-mech",tagLabel:"Measurements",hours:"2h evening / 2 blocks",checks:["Read PMT notes: absolute/percentage/fractional uncertainty","Formula card: combining uncertainties, % uncertainty = (Δx/x)×100","5 PMT questions on uncertainties","Understand: when you multiply/divide quantities, ADD percentage uncertainties"]},
+  {phase:1,date:"Sat 9 May",title:"FULL Paper 1 past paper (timed)",tag:"tag-paper",tagLabel:"Past paper",hours:"5h",checks:["Do one full AQA Paper 1 past paper under exam conditions (2h, no notes)","Mark immediately — note your score out of 85","Log every question you lost marks on","For each wrong answer: identify which topic/formula you missed","Make a targeted revision list for your 3 weakest Paper 1 areas","Take the evening off"]},
+  {phase:2,date:"Sun 10 May",title:"Rest + Medical Physics: eye and ear intro",tag:"tag-med",tagLabel:"Medical",hours:"2h",checks:["Morning rest","Afternoon: Read PMT notes on the eye — converging lens, short/long sight","Formula card: P=1/f (dioptres), P=1/u+1/v (lens equation)","5 PMT questions on lenses and vision defects"]},
+  {phase:2,date:"Mon 11 May",title:"Medical Physics: hearing & intensity",tag:"tag-med",tagLabel:"Medical",hours:"3h / 3 blocks",checks:["Read PMT notes: intensity level in dB, threshold of hearing","Formula card: I=P/A, intensity level = 10 log(I/I₀)","5 PMT questions on intensity and decibels","Know: I₀ = 10⁻¹² W/m² — the threshold of hearing"]},
+  {phase:2,date:"Tue 12 May",title:"Medical Physics: X-rays & attenuation",tag:"tag-med",tagLabel:"Medical",hours:"3h / 3 blocks",checks:["Read PMT notes: X-ray production, attenuation, CT scanning","Formula card: I=I₀e^(-μx), half-value thickness","5 PMT questions on X-rays","Make a comparison table: X-ray vs CT — uses, advantages, disadvantages"]},
+  {phase:2,date:"Wed 13 May",title:"Medical Physics: ultrasound & acoustic impedance",tag:"tag-med",tagLabel:"Medical",hours:"3h / 3 blocks",checks:["Read PMT notes: acoustic impedance Z=ρc, reflection coefficient","Formula card: Z=ρc, IR/II=(Z₂-Z₁)²/(Z₂+Z₁)²","5 PMT questions on ultrasound","Understand: gel is used to match impedance between transducer and skin"]},
+  {phase:2,date:"Thu 14 May",title:"Medical Physics: MRI & nuclear medicine",tag:"tag-med",tagLabel:"Medical",hours:"3h / 3 blocks",checks:["Read PMT notes: NMR/MRI principles, precession, relaxation times","Read PMT notes: gamma cameras, PET scans, tracers","Make a one-page summary table: MRI vs PET — what it images, how, pros/cons","5 PMT questions on MRI and nuclear medicine"]},
+  {phase:2,date:"Fri 15 May",title:"Medical Physics: full topic past paper questions",tag:"tag-paper",tagLabel:"Past paper",hours:"3h / 3 blocks",checks:["Do a full set of PMT Medical Physics topic questions (timed)","Mark strictly","Write down every definition/formula you couldn't recall","Update your Medical Physics formula card","Re-read any notes where you lost marks"]},
+  {phase:2,date:"Sat 16 May",title:"FULL Paper 2 past paper (timed)",tag:"tag-paper",tagLabel:"Past paper",hours:"5h",checks:["Full AQA Paper 2 past paper under exam conditions (2h, no notes)","Mark immediately — score out of 85","Log every wrong answer by topic","Focus especially on Fields questions — highest mark-loss topic","Spend 2h in the afternoon targeting your weakest Paper 2 area","Evening off"]},
+  {phase:2,date:"Sun 17 May",title:"Paper 3 Section A: practical skills",tag:"tag-paper",tagLabel:"Practical",hours:"4h",checks:["Read PMT notes: all required practicals summary","Practise: draw a graph with error bars and best-fit line","Learn key phrases: 'random error', 'systematic error', 'anomalous result', 'control variable'","Do 10 PMT practical skills questions","Know: gradient uncertainty = (max gradient - min gradient) / 2","Active recall: name all 12 required AQA practicals"]},
+  {phase:2,date:"Mon 18 May",title:"Mega review: weak spots from all past papers",tag:"tag-paper",tagLabel:"Review",hours:"3h / 3 blocks",checks:["Take your weak spots list from ALL past papers","Spend 30 min per weak topic: re-read notes + do 5 targeted questions","Do not revise topics you already know well — focus only on gaps","Update your formula card with anything still missing","Do a final active recall: blank page, write every formula across all topics"]},
+  {phase:2,date:"Tue 19 May",title:"Final consolidation — formula cards + past paper highlights",tag:"tag-paper",tagLabel:"Review",hours:"2h",checks:["Review your complete formula card one final time","Re-read your weak spots notes — light reading only","Do NOT start any new topics today","Pack your bag for tomorrow: pens, calculator, ruler, ID","Early night — be in bed by 10pm"]},
+  {phase:3,date:"Wed 20 May",title:"EXAM DAY — Paper 1",tag:"tag-exam",tagLabel:"EXAM",hours:"Exam day",checks:["Eat a proper breakfast","Arrive early — no rushing","In the exam: read every question fully before answering","Show ALL working — method marks exist","Don't spend too long on one question — move on and come back","After the exam: do NOT discuss answers — it helps nobody"]},
+  {phase:3,date:"Thu 21 May",title:"Post-exam rest + light Paper 2 review",tag:"tag-rest",tagLabel:"Rest/Review",hours:"2h max",checks:["Rest in the morning — you earned it","Light afternoon review: re-read Paper 2 notes (Fields + Thermal)","No past papers today — just reading","Check formula cards for Paper 2"]},
+  {phase:3,date:"Fri 22 May",title:"Paper 2 focus: Fields consolidation",tag:"tag-fields",tagLabel:"Fields",hours:"3h / 3 blocks",checks:["Re-do 15 PMT Fields questions under timed conditions","Mark and fix any errors","Focus: capacitor discharge equations and electromagnetic induction","Review transformer efficiency questions"]},
+  {phase:3,date:"Sat 23 May",title:"Paper 2 focus: Nuclear + Thermal consolidation",tag:"tag-nuc",tagLabel:"Nuclear",hours:"3h / 3 blocks",checks:["Re-do 10 PMT Nuclear questions + 10 Thermal questions","Mark and fix errors","Review: half-life calculations, binding energy per nucleon graph","Review: ideal gas calculations, kinetic theory"]},
+  {phase:3,date:"Sun 24 May",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Light formula card read if desired"]},
+  {phase:3,date:"Mon 25 May",title:"Paper 2 + Paper 3 combined past paper",tag:"tag-paper",tagLabel:"Past paper",hours:"4h",checks:["Morning: full timed Paper 2 past paper (2h)","Afternoon: mark and log every error","Evening: light read of Medical Physics notes"]},
+  {phase:3,date:"Tue 26 May",title:"Medical Physics: rapid consolidation",tag:"tag-med",tagLabel:"Medical",hours:"3h / 3 blocks",checks:["Re-read your one-page comparison tables for all imaging types","Re-do 10 PMT Medical Physics questions","Focus on: acoustic impedance formula and X-ray attenuation","Review dioptre calculations for the eye"]},
+  {phase:3,date:"Wed 27 May",title:"Paper 3 Section A: practical skills final prep",tag:"tag-paper",tagLabel:"Practical",hours:"3h / 3 blocks",checks:["Do a full Section A practical skills past paper section (timed)","Mark strictly","Practise drawing a graph with error bars from a data table","Key phrase drill: write out 5 mark-scheme answers from memory"]},
+  {phase:3,date:"Thu 28 May",title:"Full Paper 3 past paper (timed)",tag:"tag-paper",tagLabel:"Past paper",hours:"4h",checks:["Full timed Paper 3 past paper: Section A + Medical Physics B","Mark both sections","Score yourself out of 80","Log weak areas","Light revision of any Medical Physics definition you missed"]},
+  {phase:3,date:"Fri 29 May",title:"Weak spots blitz",tag:"tag-paper",tagLabel:"Review",hours:"3h",checks:["Take your Paper 2 and Paper 3 weak spots lists","30 min per weak area: notes + 5 questions","No new content — only reinforcing what you know","Update formula cards one final time"]},
+  {phase:3,date:"Sat 30 May",title:"Light review + rest",tag:"tag-rest",tagLabel:"Rest",hours:"1h max",checks:["Read formula cards once — passively","Rest for the day","Good food, hydration, sleep"]},
+  {phase:3,date:"Sun 31 May",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest — both remaining exams are next week","Trust your preparation"]},
+  {phase:3,date:"Mon 1 Jun",title:"Paper 2 final read-through",tag:"tag-fields",tagLabel:"Fields",hours:"2h",checks:["Re-read Paper 2 formula card only","Skim your weak spots notes — 10 min per topic","No questions today — reading and recall only","Early night"]},
+  {phase:3,date:"Tue 2 Jun",title:"Paper 3 final read-through",tag:"tag-med",tagLabel:"Medical",hours:"2h",checks:["Re-read Medical Physics one-page summaries","Re-read practical skills key phrases","No questions today","Pack your bag, early night"]},
+  {phase:3,date:"Wed 3 Jun",title:"Rest — pre-exam",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Light walk, good meal, early night"]},
+  {phase:4,date:"Thu 4 Jun",title:"EXAM DAY — Paper 2",tag:"tag-exam",tagLabel:"EXAM",hours:"Exam day",checks:["Eat a proper breakfast","Arrive early","Read every question fully — Fields questions have long setups","Show all working — every step earns marks","Check units on every answer","After exam: rest, no discussion"]},
+  {phase:4,date:"Fri 5 Jun",title:"Rest + very light Paper 3 check",tag:"tag-rest",tagLabel:"Rest",hours:"1h max",checks:["Rest morning","Afternoon: 10 min read of Medical Physics tables","10 min read of practical skills phrases","Nothing more — you know this material"]},
+  {phase:4,date:"Sat 6 Jun",title:"Rest day",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Good sleep"]},
+  {phase:4,date:"Sun 7 Jun",title:"Rest — eve of final exam",tag:"tag-rest",tagLabel:"Rest",hours:"0h",checks:["Full rest","Pack bag tonight","Eat well, sleep by 10pm — performance matters more than cramming"]},
+  {phase:4,date:"Mon 8 Jun",title:"EXAM DAY — Paper 3 (Final exam)",tag:"tag-exam",tagLabel:"EXAM",hours:"Exam day",checks:["Eat a proper breakfast","Section A first: graph questions, practical analysis — take your time","Section B Medical Physics: definitions matter — write in full sentences","Show all working on calculations","You have done the work. Trust yourself.","You're done."]}
+];
+
+let currentPhase = 0;
+let checked = {};
+
+function getKey(i){ return 'day_'+i; }
+
+function loadChecked(){
+  try {
+    const s = localStorage.getItem('phys_rev_2026');
+    if(s) checked = JSON.parse(s);
+  } catch(e){}
+}
+
+function saveChecked(){
+  try { localStorage.setItem('phys_rev_2026', JSON.stringify(checked)); } catch(e){}
+}
+
+function updateProgress(){
+  const total = DAYS.length;
+  const done = Object.values(checked).filter(v=>v===true).length;
+  const exam1idx = DAYS.findIndex(d=>d.tag==='tag-exam');
+  const today = new Date();
+  const startDate = new Date('2025-03-30');
+  const daysSinceStart = Math.floor((today - startDate)/(1000*60*60*24));
+  const remain = Math.max(0, exam1idx - daysSinceStart);
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-remain').textContent = remain;
+  document.getElementById('s-pct').textContent = Math.round(done/total*100)+'%';
+  document.getElementById('prog-fill') && (document.getElementById('prog-bar').style.width = Math.round(done/total*100)+'%');
+  document.getElementById('prog-txt').textContent = done+' / '+total+' days checked off';
+}
+
+function renderPhase(ph){
+  const panel = document.getElementById('phase-panels');
+  const days = DAYS.filter(d=>d.phase===ph);
+  let html = '';
+  let lastWeek = '';
+  days.forEach((d,di)=>{
+    const globalIdx = DAYS.indexOf(d);
+    const weekNum = Math.ceil((globalIdx+1)/7);
+    const weekLabel = 'Week '+(Math.floor(globalIdx/7)+1);
+    if(weekLabel!==lastWeek){
+      html += '<div class="week-header">'+weekLabel+'</div>';
+      lastWeek=weekLabel;
+    }
+    const isDone = checked[getKey(globalIdx)]===true;
+    html += '<div class="day-card'+(isDone?' done':'')+(d.tag==='tag-exam'?' today':'')+'" id="card-'+globalIdx+'">';
+    html += '<div class="day-top">';
+    html += '<span class="day-date">'+d.date+'</span>';
+    html += '<span class="day-title">'+d.title+'</span>';
+    html += '<span class="day-tag '+d.tag+'">'+d.tagLabel+'</span>';
+    html += '</div>';
+    html += '<div class="checklist">';
+    d.checks.forEach((c,ci)=>{
+      const ck = checked[getKey(globalIdx)+'_'+ci];
+      html += '<div class="check-item'+(ck?' checked-item':'')+'">';
+      html += '<input type="checkbox" id="ck-'+globalIdx+'-'+ci+'"'+(ck?' checked':'')+' onchange="toggleCheck('+globalIdx+','+ci+',this.checked)">';
+      html += '<label for="ck-'+globalIdx+'-'+ci+'">'+c+'</label>';
+      html += '</div>';
     });
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    
-    const target = document.getElementById('panel-' + id);
-    if(target) {
-      target.style.display = 'block';
-      setTimeout(() => { target.classList.add('active'); }, 10);
-    }
-    
-    if(element) element.classList.add('active');
-  }
-
-  // Live Clock & Date
-  function updateTime() {
-    const now = new Date();
-    document.getElementById('live-clock').textContent = now.toLocaleTimeString('en-US', { hour12: false });
-    document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-  }
-  setInterval(updateTime, 1000);
-  updateTime();
-
-  // Exam Countdown Logic
-  function updateExamCountdown() {
-    const now = new Date();
-    
-    // Exam Dates
-    const dates = {
-      p1: new Date('2026-05-28T09:00:00'),
-      p2: new Date('2026-06-01T09:00:00'),
-      p3: new Date('2026-06-08T09:00:00')
-    };
-    
-    for (const [key, date] of Object.entries(dates)) {
-      const diffTime = Math.max(0, date - now);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      const el = document.getElementById(`countdown-${key}`);
-      if (el) el.textContent = diffDays;
-    }
-  }
-  updateExamCountdown();
-  // Update once an hour
-  setInterval(updateExamCountdown, 1000 * 60 * 60);
-
-  // Pomodoro Logic
-  let pomTimeLeft = 25 * 60;
-  let pomInterval = null;
-  const pomDisplay = document.getElementById('pomodoro-time');
-
-  function updatePomDisplay() {
-    const m = Math.floor(pomTimeLeft / 60).toString().padStart(2, '0');
-    const s = (pomTimeLeft % 60).toString().padStart(2, '0');
-    pomDisplay.textContent = `${m}:${s}`;
-  }
-
-  function setPomodoro(minutes) {
-    clearInterval(pomInterval);
-    pomInterval = null;
-    pomTimeLeft = minutes * 60;
-    updatePomDisplay();
-    document.getElementById('pom-start').innerHTML = '<i class="fa-solid fa-play"></i> Start';
-  }
-
-  document.getElementById('pom-start').addEventListener('click', function() {
-    if (pomInterval) return;
-    this.innerHTML = '<i class="fa-solid fa-play"></i> Running';
-    pomInterval = setInterval(() => {
-      if (pomTimeLeft > 0) {
-        pomTimeLeft--;
-        updatePomDisplay();
-      } else {
-        clearInterval(pomInterval);
-        pomInterval = null;
-        this.innerHTML = '<i class="fa-solid fa-play"></i> Start';
-        alert('Time is up! Take a break.');
-      }
-    }, 1000);
+    html += '</div>';
+    html += '<div class="day-hours">'+d.hours+'</div>';
+    html += '</div>';
   });
+  panel.innerHTML = html;
+}
 
-  document.getElementById('pom-pause').addEventListener('click', function() {
-    clearInterval(pomInterval);
-    pomInterval = null;
-    document.getElementById('pom-start').innerHTML = '<i class="fa-solid fa-play"></i> Resume';
-  });
-
-  document.getElementById('pom-reset').addEventListener('click', function() {
-    setPomodoro(25);
-  });
-  updatePomDisplay();
-
-  // Study Checklist Logic (with LocalStorage)
-  const todoInput = document.getElementById('todo-input');
-  const todoList = document.getElementById('todo-list');
-  let todos = JSON.parse(localStorage.getItem('aqa_todos')) || [
-    { text: 'Read Topic 1 Notes', done: false },
-    { text: 'Do 10 Measurements MCQs', done: false }
-  ];
-
-  function renderTodos() {
-    todoList.innerHTML = '';
-    todos.forEach((todo, index) => {
-      const div = document.createElement('div');
-      div.className = `todo-item ${todo.done ? 'completed' : ''}`;
-      div.innerHTML = `
-        <input type="checkbox" ${todo.done ? 'checked' : ''} onchange="toggleTodo(${index})">
-        <span style="flex:1">${todo.text}</span>
-        <i class="fa-solid fa-trash" style="color:var(--danger); cursor:pointer; font-size:0.85rem;" onclick="deleteTodo(${index})"></i>
-      `;
-      todoList.appendChild(div);
-    });
-    localStorage.setItem('aqa_todos', JSON.stringify(todos));
+function toggleCheck(dayIdx, checkIdx, val){
+  checked[getKey(dayIdx)+'_'+checkIdx] = val;
+  const allChecks = DAYS[dayIdx].checks.length;
+  let allDone = true;
+  for(let i=0;i<allChecks;i++){
+    if(!checked[getKey(dayIdx)+'_'+i]) allDone=false;
   }
+  checked[getKey(dayIdx)] = allDone;
+  const card = document.getElementById('card-'+dayIdx);
+  if(card){
+    if(allDone) { card.classList.add('done'); }
+    else { card.classList.remove('done'); }
+  }
+  saveChecked();
+  updateProgress();
+}
 
-  todoInput.addEventListener('keypress', function(e) {
-    if (e.key === 'Enter' && this.value.trim() !== '') {
-      todos.push({ text: this.value.trim(), done: false });
-      this.value = '';
-      renderTodos();
-    }
+function showPhase(ph){
+  currentPhase=ph;
+  document.querySelectorAll('.phase-btn').forEach((b,i)=>{
+    b.classList.toggle('active',i===ph);
   });
+  renderPhase(ph);
+}
 
-  window.toggleTodo = function(index) {
-    todos[index].done = !todos[index].done;
-    renderTodos();
-  };
-
-  window.deleteTodo = function(index) {
-    todos.splice(index, 1);
-    renderTodos();
-  };
-
-  renderTodos();
+document.addEventListener('DOMContentLoaded', () => {
+    loadChecked();
+    updateProgress();
+    renderPhase(0);
+});
 </script>
 </body>
 </html>
