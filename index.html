@@ -172,9 +172,9 @@ body {
   </div>
 
   <div class="stat-strip">
-    <div class="stat-c"><div class="stat-n" id="s-total">70</div><div class="stat-l">Days total</div></div>
-    <div class="stat-c"><div class="stat-n" id="s-done">0</div><div class="stat-l">Days done</div></div>
-    <div class="stat-c"><div class="stat-n" id="s-remain">51</div><div class="stat-l">To exam 1</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-total">--</div><div class="stat-l">Days to Paper 1</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-done">0</div><div class="stat-l">Tasks done</div></div>
+    <div class="stat-c"><div class="stat-n" id="s-remain">--</div><div class="stat-l">Days to Paper 2</div></div>
     <div class="stat-c"><div class="stat-n" id="s-pct">0%</div><div class="stat-l">Complete</div></div>
   </div>
 
@@ -288,16 +288,25 @@ function saveChecked(){
 function updateProgress(){
   const total = DAYS.length;
   const done = Object.values(checked).filter(v=>v===true).length;
-  const exam1idx = DAYS.findIndex(d=>d.tag==='tag-exam');
+
   const today = new Date();
-  const startDate = new Date('2025-03-30');
-  const daysSinceStart = Math.floor((today - startDate)/(1000*60*60*24));
-  const remain = Math.max(0, exam1idx - daysSinceStart);
+  today.setHours(0,0,0,0);
+
+  const exam1Date = new Date('2026-05-20T00:00:00');
+  const exam2Date = new Date('2026-06-04T00:00:00');
+
+  let daysToP1 = Math.ceil((exam1Date - today) / (1000 * 60 * 60 * 24));
+  if (daysToP1 < 0) daysToP1 = 0;
+
+  let daysToP2 = Math.ceil((exam2Date - today) / (1000 * 60 * 60 * 24));
+  if (daysToP2 < 0) daysToP2 = 0;
+
+  document.getElementById('s-total').textContent = daysToP1;
   document.getElementById('s-done').textContent = done;
-  document.getElementById('s-remain').textContent = remain;
+  document.getElementById('s-remain').textContent = daysToP2;
   document.getElementById('s-pct').textContent = Math.round(done/total*100)+'%';
-  document.getElementById('prog-fill') && (document.getElementById('prog-bar').style.width = Math.round(done/total*100)+'%');
-  document.getElementById('prog-txt').textContent = done+' / '+total+' days checked off';
+  document.getElementById('prog-bar') && (document.getElementById('prog-bar').style.width = Math.round(done/total*100)+'%');
+  document.getElementById('prog-txt').textContent = done+' / '+total+' tasks checked off';
 }
 
 function renderPhase(ph){
